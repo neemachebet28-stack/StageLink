@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/operatorHeader') %>
+
+  <main class="op-main">
+    <section class="page-header">
+      <div class="container" style="max-width: 640px;">
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">Request <%= request.request_reference %></h1>
+        <p class="lede"><%= request.origin_text %> &rarr; <%= request.destination_text %></p>
+
+        <% if (error) { %><div class="op-error" style="margin-top: var(--space-6);"><%= error %></div><% } %>
+
+        <div class="list-rows" style="margin-top: var(--space-6);">
+          <div class="list-row"><div class="list-row-title">Passengers</div><div class="list-row-meta"><%= request.passenger_count %></div></div>
+          <div class="list-row"><div class="list-row-title">Travel date</div><div class="list-row-meta"><%= request.travel_date %><% if (request.departure_time) { %> at <%= request.departure_time %><% } %></div></div>
+          <% if (request.return_date) { %><div class="list-row"><div class="list-row-title">Return</div><div class="list-row-meta"><%= request.return_date %><% if (request.return_time) { %> at <%= request.return_time %><% } %></div></div><% } %>
+          <% if (request.vehicle_requirements) { %><div class="list-row"><div class="list-row-title">Vehicle requirements</div><div class="list-row-meta"><%= request.vehicle_requirements %></div></div><% } %>
+          <% if (request.budget_kes) { %><div class="list-row"><div class="list-row-title">Budget</div><div class="list-row-meta">KES <%= Number(request.budget_kes).toLocaleString() %></div></div><% } %>
+          <% if (request.notes) { %><div class="list-row"><div class="list-row-title">Notes</div><div class="list-row-meta"><%= request.notes %></div></div><% } %>
+          <div class="list-row"><div class="list-row-title">Status</div><span class="badge badge-<%= request.status === 'open' ? 'filling' : (request.status === 'accepted' ? 'confirmed' : 'cancelled') %>"><%= request.status.charAt(0).toUpperCase() + request.status.slice(1) %></span></div>
+        </div>
+
+        <% if (request.status === 'open') { %>
+          <h2 class="h3" style="margin-top: var(--space-8);"><%= ownQuotation ? 'Modify your quotation' : 'Submit a quotation' %></h2>
+          <form class="op-form" method="post" action="/operator/group-trips/<%= request.id %>/quotations">
+            <div class="op-field">
+              <label for="priceKes">Price (KES)</label>
+              <input type="number" id="priceKes" name="priceKes" min="1" step="1" value="<%= ownQuotation ? ownQuotation.price_kes : '' %>" required>
+            </div>
+            <div class="op-field">
+              <label for="vehicleDetails">Vehicle details</label>
+              <input type="text" id="vehicleDetails" name="vehicleDetails" placeholder="e.g. 33-seater shuttle, AC" value="<%= ownQuotation ? (ownQuotation.vehicle_details || '') : '' %>">
+            </div>
+            <div class="op-field">
+              <label for="notes">Notes / terms</label>
+              <input type="text" id="notes" name="notes" value="<%= ownQuotation ? (ownQuotation.notes || '') : '' %>">
+            </div>
+            <button type="submit" class="btn btn-primary"><%= ownQuotation ? 'Update quotation' : 'Submit quotation' %></button>
+          </form>
+
+          <% if (ownQuotation && ownQuotation.status === 'pending') { %>
+            <form method="post" action="/operator/group-trips/<%= request.id %>/quotations/withdraw" style="margin-top: var(--space-3);" onsubmit="return confirm('Withdraw your quotation?');">
+              <button type="submit" class="btn btn-secondary">Withdraw quotation</button>
+            </form>
+          <% } %>
+        <% } else if (ownQuotation) { %>
+          <div class="empty-state" style="margin-top: var(--space-8);">
+            This request is no longer open. Your quotation status:
+            <span class="badge badge-<%= ownQuotation.status === 'accepted' ? 'confirmed' : 'cancelled' %>"><%= ownQuotation.status.charAt(0).toUpperCase() + ownQuotation.status.slice(1) %></span>
+          </div>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

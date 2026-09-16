@@ -1,0 +1,40 @@
+<%
+  // The single place an operator's verification and reputation are rendered.
+  // Inputs: status (organizations.verification_status), optional summary
+  // ({ count, average } from published reviews), optional explain (boolean).
+  //
+  // Nothing here can invent trust: the label comes only from the stored
+  // status, and "Verified" is shown only when that status is exactly
+  // 'verified'. A missing/unknown status falls back to "Not verified".
+  const trustLabels = {
+    verified: 'Verified by StageLink',
+    pending: 'Verification pending',
+    unverified: 'Not verified',
+    rejected: 'Verification declined',
+  };
+  const trustExplanations = {
+    verified: 'StageLink reviewed this operator and confirmed its verification.',
+    pending: 'StageLink is reviewing this operator. Verification is not complete yet.',
+    unverified: "StageLink hasn't reviewed this operator yet. That is not a judgement either way.",
+    rejected: 'StageLink reviewed this operator and could not verify it.',
+  };
+  const trustKey = Object.prototype.hasOwnProperty.call(trustLabels, status) ? status : 'unverified';
+  const hasSummary = typeof summary !== 'undefined' && summary !== null;
+  const reviewCount = hasSummary ? Number(summary.count) : 0;
+  const reviewAverage = hasSummary && summary.average !== null && summary.average !== undefined ? Number(summary.average) : null;
+%>
+<span class="trust-indicator">
+  <span class="badge badge-<%= trustKey %>"><%= trustLabels[trustKey] %></span>
+  <% if (hasSummary) { %>
+    <span class="trust-rating">
+      <% if (reviewCount > 0 && reviewAverage !== null) { %>
+        <strong><%= reviewAverage.toFixed(1) %></strong>/5 from <%= reviewCount %> review<%= reviewCount === 1 ? '' : 's' %>
+      <% } else { %>
+        No reviews yet
+      <% } %>
+    </span>
+  <% } %>
+</span>
+<% if (typeof explain !== 'undefined' && explain) { %>
+  <p class="trust-explain small-text"><%= trustExplanations[trustKey] %> Ratings come only from passengers who completed a trip.</p>
+<% } %>

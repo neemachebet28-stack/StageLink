@@ -1,0 +1,39 @@
+<aside class="op-sidebar" data-op-sidebar>
+  <div class="op-sidebar-brand">
+    <span class="nav-logo-mark" aria-hidden="true">SL</span>
+    <span><%= currentUser.organizationName %></span>
+  </div>
+
+  <nav class="op-sidebar-nav" aria-label="Operator navigation">
+    <a href="/operator" class="<%= currentPath === '/operator' ? 'is-active' : '' %>">Dashboard</a>
+    <a href="/operator/trips" class="<%= currentPath.startsWith('/operator/trips') ? 'is-active' : '' %>">Trips</a>
+    <a href="/operator/bookings" class="<%= currentPath.startsWith('/operator/bookings') ? 'is-active' : '' %>">Bookings</a>
+    <a href="/operator/vehicles" class="<%= currentPath.startsWith('/operator/vehicles') ? 'is-active' : '' %>">Vehicles</a>
+    <a href="/operator/drivers" class="<%= currentPath.startsWith('/operator/drivers') ? 'is-active' : '' %>">Drivers</a>
+    <a href="/operator/routes" class="<%= currentPath.startsWith('/operator/routes') ? 'is-active' : '' %>">Routes</a>
+    <a href="/operator/stages" class="<%= currentPath.startsWith('/operator/stages') ? 'is-active' : '' %>">Stages</a>
+    <a href="/operator/group-trips" class="<%= currentPath.startsWith('/operator/group-trips') ? 'is-active' : '' %>">Group Trips</a>
+    <a href="/operator/payments" class="<%= currentPath.startsWith('/operator/payments') ? 'is-active' : '' %>">Payments</a>
+    <a href="/operator/analytics" class="<%= currentPath.startsWith('/operator/analytics') ? 'is-active' : '' %>">Analytics</a>
+    <a href="/operator/notifications" class="<%= currentPath.startsWith('/operator/notifications') ? 'is-active' : '' %>">Notifications <span class="notif-badge notif-badge-inline" data-notif-count hidden>0</span></a>
+    <a href="/operator/verify" class="<%= currentPath.startsWith('/operator/verify') ? 'is-active' : '' %>">Verify tickets</a>
+    <a href="/operator/settings" class="<%= currentPath.startsWith('/operator/settings') ? 'is-active' : '' %>">Settings</a>
+  </nav>
+
+  <div class="op-sidebar-footer">
+    <a href="/" class="op-sidebar-footer-link">View public site</a>
+    <form method="post" action="/logout">
+      <button type="submit" class="op-sidebar-footer-link" style="background:none; border:none; padding:0; cursor:pointer; font: inherit;">Sign out</button>
+    </form>
+  </div>
+</aside>
+
+<div class="op-sidebar-backdrop" data-op-sidebar-backdrop hidden></div>
+
+<header class="op-topbar">
+  <button type="button" class="op-topbar-toggle" data-op-sidebar-toggle aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <span class="op-topbar-title"><%= typeof title !== 'undefined' ? title : 'Operator' %></span>
+  <span style="margin-left:auto;"><%- include('notificationBell', { href: '/operator/notifications' }) %></span>
+</header>

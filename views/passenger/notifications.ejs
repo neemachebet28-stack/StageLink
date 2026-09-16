@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main>
+    <section class="page-header">
+      <div class="container" style="max-width: 640px;">
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">Notifications</h1>
+        <p class="lede">Updates about your bookings, payments and trips.</p>
+        <p class="small-text" style="margin-top: var(--space-2);">
+          Without an account, notifications are tied to this browser session.
+        </p>
+        <%- include('../partials/notificationList', { notifications, returnTo }) %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">Discover stages</h1>
+        <p class="lede">Search for a stage directly, browse by county, or find what's near you.</p>
+
+        <form class="search-form" action="/discover" method="get" autocomplete="off">
+          <input
+            class="search-input"
+            type="search"
+            name="q"
+            value="<%= search %>"
+            placeholder="Search a stage, town, or county"
+            data-live-search
+            aria-label="Search stages"
+          >
+          <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        <div class="list-rows" data-search-suggestions hidden style="margin-top: var(--space-2); max-width: 560px;"></div>
+
+        <div class="nearby-panel" data-nearby-panel>
+          <div class="nearby-panel-header">
+            <div>
+              <h3 class="h3">Stages near me</h3>
+              <p class="small-text">Uses your browser's location — nothing is shared until you allow it.</p>
+            </div>
+            <button type="button" class="btn btn-secondary" data-nearby-trigger>Use my location</button>
+          </div>
+          <p class="nearby-status" data-nearby-status></p>
+          <div class="nearby-results" data-nearby-results></div>
+        </div>
+      </div>
+    </section>
+
+    <% if (search) { %>
+      <section>
+        <div class="container">
+          <h2 class="h2">Results for "<%= search %>"</h2>
+          <p class="search-results-note"><%= searchResults.length %> stage<%= searchResults.length === 1 ? '' : 's' %> found.</p>
+
+          <% if (searchResults.length === 0) { %>
+            <div class="empty-state" style="margin-top: var(--space-6);">
+              No stages matched that search. Try a different name, or browse by county below.
+            </div>
+          <% } else { %>
+            <div class="list-rows">
+              <% searchResults.forEach(function (stage) { %>
+                <a class="list-row" href="/stages/<%= stage.id %>">
+                  <div>
+                    <div class="list-row-title"><%= stage.name %></div>
+                    <div class="list-row-meta"><%= stage.town_name %>, <%= stage.county_name %></div>
+                  </div>
+                  <div class="list-row-action">View stage</div>
+                </a>
+              <% }); %>
+            </div>
+          <% } %>
+        </div>
+      </section>
+    <% } %>
+
+    <section>
+      <div class="container">
+        <h2 class="h2">Browse by county</h2>
+        <p class="body-text" style="margin-top: 8px;">Kenya's transport network, county by county.</p>
+
+        <% if (counties.length === 0) { %>
+          <div class="empty-state" style="margin-top: var(--space-6);">
+            No counties are set up yet.
+          </div>
+        <% } else { %>
+          <div class="entity-grid">
+            <% counties.forEach(function (county) { %>
+              <a class="entity-card" href="/discover/counties/<%= county.id %>">
+                <div class="entity-card-title"><%= county.name %></div>
+                <div class="entity-card-meta"><%= county.town_count %> town<%= county.town_count === 1 ? '' : 's' %> listed</div>
+              </a>
+            <% }); %>
+          </div>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

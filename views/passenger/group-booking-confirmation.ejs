@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main>
+    <section class="page-header">
+      <div class="container" style="max-width: 560px;">
+        <span class="badge badge-<%= booking.status === 'confirmed' ? 'boarding' : (booking.status === 'pending' ? 'filling' : 'cancelled') %>" style="margin-bottom: var(--space-4); display: inline-flex;">
+          <%= booking.status.charAt(0).toUpperCase() + booking.status.slice(1) %>
+        </span>
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">Group booking <%= reference %></h1>
+        <p class="lede"><%= booking.origin_text %> &rarr; <%= booking.destination_text %> · <%= booking.organization_name %></p>
+
+        <div class="list-rows" style="margin-top: var(--space-6);">
+          <div class="list-row"><div class="list-row-title">Passengers</div><div class="list-row-meta"><%= booking.passenger_count %></div></div>
+          <div class="list-row"><div class="list-row-title">Travel date</div><div class="list-row-meta"><%= booking.travel_date %></div></div>
+          <div class="list-row"><div class="list-row-title">Agreed price</div><div class="list-row-meta">KES <%= Number(booking.agreed_price_kes).toLocaleString() %></div></div>
+        </div>
+
+        <% if (booking.status === 'pending') { %>
+          <div class="empty-state" style="margin-top: var(--space-6); text-align: left;">
+            This reserves the quotation — it isn't paid yet. Complete payment before it expires.
+          </div>
+          <a href="/bookings/<%= reference %>/pay" class="btn btn-primary" style="margin-top: var(--space-4); width: 100%;">Pay with M-Pesa</a>
+        <% } else if (booking.status === 'confirmed') { %>
+          <div class="empty-state" style="margin-top: var(--space-6); text-align: left; border-color: var(--color-primary); color: var(--color-primary);">
+            Paid and confirmed with <%= booking.organization_name %>.
+          </div>
+        <% } else if (booking.status === 'expired') { %>
+          <div class="empty-state" style="margin-top: var(--space-6); text-align: left; border-color: var(--color-error); color: var(--color-error);">
+            This booking expired before payment was completed.
+          </div>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

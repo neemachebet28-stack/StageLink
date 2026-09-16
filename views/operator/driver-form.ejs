@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/operatorHeader') %>
+
+  <main class="op-main">
+    <section class="page-header">
+      <div class="container" style="max-width: 560px;">
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);"><%= title %></h1>
+        <% if (error) { %><div class="op-error" style="margin-top: var(--space-6);"><%= error %></div><% } %>
+
+        <form class="op-form" method="post" action="<%= mode === 'create' ? '/operator/drivers' : '/operator/drivers/' + driver.id %>">
+          <div class="op-field">
+            <label for="fullName">Full name</label>
+            <input type="text" id="fullName" name="fullName" value="<%= driver ? driver.full_name : (typeof formValues !== 'undefined' && formValues.fullName ? formValues.fullName : '') %>" required>
+          </div>
+          <div class="op-field">
+            <label for="phone">Phone</label>
+            <input type="text" id="phone" name="phone" value="<%= driver ? (driver.phone || '') : '' %>">
+          </div>
+          <div class="op-field">
+            <label for="licenseNumber">License number</label>
+            <input type="text" id="licenseNumber" name="licenseNumber" value="<%= driver ? (driver.license_number || '') : '' %>">
+          </div>
+          <% if (mode === 'edit') { %>
+            <div class="op-field">
+              <label for="status">Status</label>
+              <select id="status" name="status">
+                <option value="active" <%= driver.status === 'active' ? 'selected' : '' %>>Active</option>
+                <option value="inactive" <%= driver.status === 'inactive' ? 'selected' : '' %>>Inactive</option>
+              </select>
+            </div>
+          <% } %>
+          <button type="submit" class="btn btn-primary"><%= mode === 'create' ? 'Add driver' : 'Save changes' %></button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

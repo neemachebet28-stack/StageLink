@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/operatorHeader') %>
+
+  <main class="op-main">
+    <section class="page-header">
+      <div class="container">
+        <div class="op-toolbar" style="margin-top: 0;">
+          <div>
+            <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">Seat layouts</h1>
+            <p class="lede">Reusable seat maps for your vehicles.</p>
+          </div>
+          <a href="/operator/seat-layouts/new" class="btn btn-primary">New layout</a>
+        </div>
+      </div>
+    </section>
+    <section style="padding-top: 0;">
+      <div class="container">
+        <% if (layouts.length === 0) { %>
+          <div class="empty-state">No seat layouts yet.</div>
+        <% } else { %>
+          <table class="op-table">
+            <thead><tr><th>Name</th><th>Total seats</th><th>Vehicles using it</th></tr></thead>
+            <tbody>
+              <% layouts.forEach(function (l) { %>
+                <tr><td><%= l.name %></td><td><%= l.total_seats %></td><td><%= l.vehicle_count %></td></tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

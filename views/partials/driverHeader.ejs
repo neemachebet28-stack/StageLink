@@ -1,0 +1,12 @@
+<header class="drv-topbar">
+  <a href="/driver" class="drv-topbar-brand">
+    <span class="nav-logo-mark" aria-hidden="true">SL</span>
+    <span><%= currentUser.organizationName %></span>
+  </a>
+  <div style="display:flex; align-items:center; gap: var(--space-2);">
+    <%- include('notificationBell', { href: '/driver/notifications' }) %>
+    <form method="post" action="/logout">
+      <button type="submit" class="drv-topbar-signout">Sign out</button>
+    </form>
+  </div>
+</header>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/driverHeader') %>
+
+  <main class="drv-container">
+    <div class="drv-page-title"><%= trip.origin_stage_name %> &rarr; <%= trip.destination_name %></div>
+    <div class="drv-page-sub">
+      <%= trip.registration_number %><% if (trip.vehicle_type) { %> · <%= trip.vehicle_type %><% } %> ·
+      <span class="badge badge-<%= trip.status %>"><%= trip.status.charAt(0).toUpperCase() + trip.status.slice(1) %></span>
+    </div>
+    <div class="drv-page-sub">
+      Scheduled <%= formatDateTime(trip.scheduled_departure) %>
+      <% if (trip.estimated_departure) { %><br>Estimated <%= formatDateTime(trip.estimated_departure) %><% } %>
+    </div>
+
+    <% if (error) { %><div class="op-error"><%= error %></div><% } %>
+
+    <div class="drv-actions">
+      <a href="/driver/trips/<%= trip.id %>/verify" class="btn btn-primary">Verify &amp; board passengers</a>
+    </div>
+
+    <div class="drv-section">
+      <div class="drv-section-title">Update trip status</div>
+      <form class="drv-status-form" method="post" action="/driver/trips/<%= trip.id %>/status">
+        <select name="status">
+          <% permittedStatuses.forEach(function (s) { %>
+            <option value="<%= s %>" <%= trip.status === s ? 'selected' : '' %>><%= s.charAt(0).toUpperCase() + s.slice(1) %></option>
+          <% }); %>
+        </select>
+        <button type="submit" class="btn btn-secondary">Update status</button>
+      </form>
+      <p class="small-text">You can set Boarding, Departed, or Arrived. Scheduling and cancellation are operator decisions.</p>
+    </div>
+
+    <div class="drv-section">
+      <div class="drv-section-title">Passengers (<%= passengers.length %>)</div>
+      <% if (passengers.length === 0) { %>
+        <div class="empty-state">No confirmed passengers yet.</div>
+      <% } else { %>
+        <% passengers.forEach(function (p) { %>
+          <div class="drv-passenger-row">
+            <div>
+              <div style="font-weight: 600;"><%= p.passenger_name %></div>
+              <div class="small-text">Seat <%= p.seat_number %> · <%= p.passenger_phone %></div>
+            </div>
+            <span class="badge badge-<%= p.ticket_status || 'pending' %>"><%= (p.ticket_status || 'pending').charAt(0).toUpperCase() + (p.ticket_status || 'pending').slice(1) %></span>
+          </div>
+        <% }); %>
+      <% } %>
+    </div>
+
+    <div class="drv-section">
+      <div class="drv-section-title">Seats</div>
+      <% seats.forEach(function (s) { %>
+        <div class="drv-seat-row">
+          <span>Seat <%= s.seat_number %> (<%= s.seat_type %>)</span>
+          <span class="badge badge-<%= s.status %>"><%= s.status.charAt(0).toUpperCase() + s.status.slice(1) %></span>
+        </div>
+      <% }); %>
+    </div>
+  </main>
+
+  <%- include('../partials/scripts') %>
+</body>
+</html>

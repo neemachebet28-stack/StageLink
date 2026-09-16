@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/driverHeader') %>
+
+  <main class="drv-container">
+    <div class="drv-page-title">Notifications</div>
+    <div class="drv-page-sub"><%= currentUser.organizationName %></div>
+    <%- include('../partials/notificationList', { notifications, returnTo }) %>
+  </main>
+
+  <%- include('../partials/scripts') %>
+</body>
+</html>

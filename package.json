@@ -1,0 +1,20 @@
+{
+  "name": "stagelink",
+  "version": "0.1.0",
+  "private": true,
+  "description": "StageLink — Kenyan public transport booking and management SaaS",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "express-session": "^1.18.1",
+    "mysql2": "^3.11.4",
+    "qrcode": "^1.5.4"
+  }
+}

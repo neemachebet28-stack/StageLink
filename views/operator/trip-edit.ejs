@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/operatorHeader') %>
+
+  <main class="op-main">
+    <section class="page-header">
+      <div class="container" style="max-width: 640px;">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="/operator/trips">Trips</a>
+          <span class="sep">/</span>
+          <span><%= trip.origin_stage_name %> &rarr; <%= trip.destination_name %></span>
+        </nav>
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">
+          <%= trip.origin_stage_name %> &rarr; <%= trip.destination_name %>
+        </h1>
+        <p class="lede">
+          Scheduled <%= formatDateTime(trip.scheduled_departure) %> ·
+          <%= trip.total_seats - trip.available_seats %> / <%= trip.total_seats %> seats taken
+        </p>
+
+        <% if (error) { %>
+          <div class="op-error" style="margin-top: var(--space-6);"><%= error %></div>
+        <% } %>
+
+        <form class="op-form" method="post" action="/operator/trips/<%= trip.id %>">
+          <div class="op-field">
+            <label for="status">Status</label>
+            <select id="status" name="status" required>
+              <% statuses.forEach(function (s) { %>
+                <option value="<%= s %>" <%= trip.status === s ? 'selected' : '' %>>
+                  <%= s.charAt(0).toUpperCase() + s.slice(1) %>
+                </option>
+              <% }); %>
+            </select>
+            <p class="op-field-hint">
+              Occupancy never changes this automatically — you're the source of truth for
+              whether this trip is actually filling, confirmed, or boarding.
+            </p>
+          </div>
+
+          <div class="op-field">
+            <label for="estimatedDeparture">Estimated departure <span class="small-text">(optional)</span></label>
+            <input type="datetime-local" id="estimatedDeparture" name="estimatedDeparture"
+                   value="<%= trip.estimated_departure ? trip.estimated_departure.slice(0,16).replace(' ', 'T') : '' %>">
+          </div>
+
+          <div class="op-field">
+            <label for="confirmedDeparture">Confirmed departure</label>
+            <input type="datetime-local" id="confirmedDeparture" name="confirmedDeparture"
+                   value="<%= trip.confirmed_departure ? trip.confirmed_departure.slice(0,16).replace(' ', 'T') : '' %>">
+            <p class="op-field-hint">
+              Required before setting status to Confirmed, Boarding, Departed, or Arrived —
+              StageLink never displays a confirmed departure passengers didn't actually get.
+            </p>
+          </div>
+
+          <div class="op-field">
+            <label for="vehicleId">Vehicle</label>
+            <select id="vehicleId" name="vehicleId" required>
+              <% vehicles.forEach(function (v) { %>
+                <option value="<%= v.id %>" <%= trip.vehicle_id === v.id ? 'selected' : '' %>>
+                  <%= v.registration_number %>
+                </option>
+              <% }); %>
+            </select>
+            <p class="op-field-hint">Reassigning the vehicle does not regenerate seats in this phase.</p>
+          </div>
+
+          <div class="op-field">
+            <label for="driverId">Driver</label>
+            <select id="driverId" name="driverId">
+              <option value="">Not assigned</option>
+              <% drivers.forEach(function (d) { %>
+                <option value="<%= d.id %>" <%= trip.driver_id === d.id ? 'selected' : '' %>>
+                  <%= d.full_name %>
+                </option>
+              <% }); %>
+            </select>
+          </div>
+
+          <div class="op-field">
+            <label for="fareKes">Fare (KES)</label>
+            <input type="number" id="fareKes" name="fareKes" min="0" step="1" value="<%= trip.fare_kes %>" required>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

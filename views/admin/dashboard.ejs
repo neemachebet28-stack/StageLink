@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/adminHeader') %>
+
+  <main class="op-main">
+    <section class="page-header">
+      <div class="container">
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">Platform overview</h1>
+        <p class="lede">Every figure below is a live query over the database — nothing here is stored or invented.</p>
+
+        <div class="op-stats">
+          <div class="op-stat-card"><div class="op-stat-value"><%= metrics.activeUsers %></div><div class="op-stat-label">Active users</div></div>
+          <div class="op-stat-card"><div class="op-stat-value"><%= metrics.operatorCount %></div><div class="op-stat-label">Operators (<%= metrics.verifiedOperators %> verified, <%= metrics.pendingOperators %> pending)</div></div>
+          <div class="op-stat-card"><div class="op-stat-value"><%= metrics.activeTrips %></div><div class="op-stat-label">Active trips</div></div>
+          <div class="op-stat-card"><div class="op-stat-value"><%= metrics.confirmedBookings %></div><div class="op-stat-label">Paid bookings (confirmed or completed)</div></div>
+          <div class="op-stat-card"><div class="op-stat-value">KES <%= metrics.platformRevenueKes.toLocaleString() %></div><div class="op-stat-label">Platform-wide revenue (paid)</div></div>
+          <div class="op-stat-card"><div class="op-stat-value"><%= metrics.openGroupRequests %></div><div class="op-stat-label">Open group requests</div></div>
+          <div class="op-stat-card"><div class="op-stat-value"><%= metrics.flaggedReviews %></div><div class="op-stat-label">Flagged reviews needing attention</div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

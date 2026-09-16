@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/operatorHeader') %>
+
+  <main class="op-main">
+    <section class="page-header">
+      <div class="container">
+        <div class="op-toolbar" style="margin-top: 0;">
+          <div>
+            <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">Stages</h1>
+            <p class="lede">Where you serve passengers from.</p>
+          </div>
+          <a href="/operator/stages/new" class="btn btn-primary">Add a stage</a>
+        </div>
+      </div>
+    </section>
+    <section style="padding-top: 0;">
+      <div class="container">
+        <% if (stages.length === 0) { %>
+          <div class="empty-state">You don't serve any stages yet.</div>
+        <% } else { %>
+          <table class="op-table">
+            <thead><tr><th>Stage</th><th>Town</th><th>County</th><th></th></tr></thead>
+            <tbody>
+              <% stages.forEach(function (s) { %>
+                <tr>
+                  <td><%= s.name %></td>
+                  <td><%= s.town_name %></td>
+                  <td><%= s.county_name %></td>
+                  <td>
+                    <form method="post" action="/operator/stages/<%= s.link_id %>/remove" onsubmit="return confirm('Stop serving this stage?');">
+                      <button type="submit" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.85rem;">Remove</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

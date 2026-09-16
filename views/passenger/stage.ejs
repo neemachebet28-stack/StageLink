@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="/discover">Discover</a>
+          <span class="sep">/</span>
+          <a href="/discover/counties/<%= stage.county_id %>"><%= stage.county_name %></a>
+          <span class="sep">/</span>
+          <a href="/discover/towns/<%= stage.town_id %>"><%= stage.town_name %></a>
+          <span class="sep">/</span>
+          <span><%= stage.name %></span>
+        </nav>
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);"><%= stage.name %></h1>
+        <p class="lede">
+          <%= stage.town_name %>, <%= stage.county_name %> County
+          <% if (stage.landmark) { %> · <%= stage.landmark %><% } %>
+        </p>
+        <% if (stage.description) { %>
+          <p class="body-text" style="margin-top: var(--space-2);"><%= stage.description %></p>
+        <% } %>
+      </div>
+    </section>
+
+    <section>
+      <div class="container detail-grid">
+        <!-- Map integration layer: provider-agnostic placeholder -->
+        <div>
+          <div class="map-panel">
+            <div class="map-placeholder" data-map-container
+                 data-lat="<%= stage.latitude !== null ? stage.latitude : '' %>"
+                 data-lng="<%= stage.longitude !== null ? stage.longitude : '' %>"
+                 data-label="<%= stage.name %>">
+            </div>
+            <div class="map-panel-footer">
+              <% if (stage.latitude !== null && stage.longitude !== null) { %>
+                <span class="map-coordinates"><%= Number(stage.latitude).toFixed(4) %>, <%= Number(stage.longitude).toFixed(4) %></span>
+                <div class="directions-actions" data-directions
+                     data-lat="<%= stage.latitude %>" data-lng="<%= stage.longitude %>">
+                  <a href="#" data-mode="walking">Walking</a>
+                  <a href="#" data-mode="bicycling">Cycling</a>
+                  <a href="#" data-mode="driving">Driving</a>
+                </div>
+              <% } else { %>
+                <span class="map-coordinates">Location not yet available</span>
+              <% } %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Operators + routes -->
+        <div>
+          <div class="detail-section">
+            <div class="detail-section-title">
+              <h2 class="h3">Operators at this stage</h2>
+            </div>
+            <% if (operators.length === 0) { %>
+              <div class="empty-state">No operators are listed at this stage yet.</div>
+            <% } else { %>
+              <div class="list-rows">
+                <% operators.forEach(function (op) { %>
+                  <a class="list-row" href="/stages/<%= stage.id %>/operators/<%= op.id %>">
+                    <div>
+                      <div class="list-row-title"><%= op.name %></div>
+                      <div class="list-row-meta">See destinations from this stage</div>
+                    </div>
+                    <span class="badge badge-<%= op.verification_status %>">
+                      <%= op.verification_status.charAt(0).toUpperCase() + op.verification_status.slice(1) %>
+                    </span>
+                  </a>
+                <% }); %>
+              </div>
+            <% } %>
+          </div>
+
+          <div class="detail-section">
+            <div class="detail-section-title">
+              <h2 class="h3">Destinations from here</h2>
+            </div>
+            <% if (routesFromStage.length === 0) { %>
+              <div class="empty-state">No routes are listed from this stage yet.</div>
+            <% } else { %>
+              <div class="list-rows">
+                <% routesFromStage.forEach(function (route) { %>
+                  <a class="list-row" href="/routes/<%= route.id %>">
+                    <div>
+                      <div class="list-row-title"><%= route.destination_name %></div>
+                      <div class="list-row-meta">
+                        <%= route.organization_name %><% if (route.typical_duration_minutes) { %> · ~<%= Math.round(route.typical_duration_minutes / 60 * 10) / 10 %> hrs<% } %>
+                      </div>
+                    </div>
+                    <% if (route.base_fare_kes) { %>
+                      <div class="list-row-action">KES <%= Number(route.base_fare_kes).toLocaleString() %></div>
+                    <% } %>
+                  </a>
+                <% }); %>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

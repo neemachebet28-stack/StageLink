@@ -1,0 +1,279 @@
+/* ==================================================
+   StageLink — operator dashboard styles
+   ==================================================
+   Loaded only on /operator/* pages (see operator layout partials).
+   ================================================== */
+
+/* --------------------------------------------------
+   App shell: fixed sidebar (desktop/tablet) + topbar
+   -------------------------------------------------- */
+:root {
+  --op-sidebar-width: 232px;
+  --op-topbar-height: 56px;
+}
+
+.op-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--op-sidebar-width);
+  background: var(--color-dark);
+  color: rgba(255, 255, 255, 0.85);
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  overflow-y: auto;
+}
+
+.op-sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: var(--space-4) var(--space-4);
+  font-weight: 700;
+  color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.op-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-3);
+  gap: 2px;
+  flex: 1;
+}
+
+.op-sidebar-nav a {
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.op-sidebar-nav a:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+.op-sidebar-nav a.is-active {
+  background: var(--color-primary);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.op-sidebar-footer {
+  padding: var(--space-4);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.op-sidebar-footer-link {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+.op-sidebar-footer-link:hover {
+  color: #ffffff;
+}
+
+.op-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: none;
+  align-items: center;
+  gap: var(--space-3);
+  height: var(--op-topbar-height);
+  padding: 0 var(--space-4);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.op-topbar-title {
+  font-weight: 600;
+  color: var(--color-dark);
+}
+
+.op-topbar-toggle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: none;
+  cursor: pointer;
+}
+
+.op-topbar-toggle span {
+  width: 16px;
+  height: 2px;
+  background: var(--color-dark);
+}
+
+.op-sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(16, 35, 28, 0.5);
+  z-index: 40;
+}
+
+.op-main {
+  margin-left: var(--op-sidebar-width);
+  min-height: 100vh;
+}
+
+@media (max-width: 1023px) {
+  .op-sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+  }
+
+  .op-sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  .op-sidebar-backdrop.is-open {
+    display: block;
+  }
+
+  .op-topbar {
+    display: flex;
+  }
+
+  .op-main {
+    margin-left: 0;
+  }
+}
+
+.op-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+}
+
+.op-stat-card {
+  padding: var(--space-6);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+}
+
+.op-stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-dark);
+}
+
+.op-stat-label {
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: var(--color-text-faint);
+}
+
+.op-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--space-6);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+
+.op-table th,
+.op-table td {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.op-table th {
+  background: var(--color-bg);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.op-table tr:last-child td {
+  border-bottom: none;
+}
+
+.op-table td a {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.op-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-top: var(--space-6);
+}
+
+.op-form {
+  max-width: 560px;
+  margin-top: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.op-field label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-bottom: 6px;
+}
+
+.op-field select,
+.op-field input {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: var(--radius-input);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  font-family: var(--font-base);
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+.op-field-hint {
+  margin-top: 4px;
+  font-size: 0.8rem;
+  color: var(--color-text-faint);
+}
+
+.op-error {
+  padding: var(--space-4);
+  border-radius: var(--radius-card);
+  background: var(--color-error-tint);
+  color: var(--color-error);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 1023px) {
+  .op-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .op-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}

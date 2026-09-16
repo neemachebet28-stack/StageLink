@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/operatorHeader') %>
+
+  <main class="op-main">
+    <section class="page-header">
+      <div class="container">
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">Group Trips</h1>
+        <p class="lede">Open requests any operator can quote on, plus your own quotations.</p>
+      </div>
+    </section>
+
+    <section style="padding-top: 0;">
+      <div class="container">
+        <h2 class="h2">Open requests (<%= openRequests.length %>)</h2>
+        <% if (openRequests.length === 0) { %>
+          <div class="empty-state" style="margin-top: var(--space-6);">No open requests right now.</div>
+        <% } else { %>
+          <table class="op-table">
+            <thead><tr><th>Reference</th><th>Route</th><th>Passengers</th><th>Date</th><th>Quotations</th><th></th></tr></thead>
+            <tbody>
+              <% openRequests.forEach(function (r) { %>
+                <tr>
+                  <td><%= r.request_reference %></td>
+                  <td><%= r.origin_text %> &rarr; <%= r.destination_text %></td>
+                  <td><%= r.passenger_count %></td>
+                  <td><%= r.travel_date %></td>
+                  <td><%= r.quotation_count %></td>
+                  <td><a href="/operator/group-trips/<%= r.id %>">View &amp; quote</a></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2 class="h2">My quotations</h2>
+        <% if (myQuotations.length === 0) { %>
+          <div class="empty-state" style="margin-top: var(--space-6);">You haven't quoted on any requests yet.</div>
+        <% } else { %>
+          <table class="op-table">
+            <thead><tr><th>Request</th><th>Route</th><th>My price</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <% myQuotations.forEach(function (q) { %>
+                <tr>
+                  <td><%= q.request_reference %></td>
+                  <td><%= q.origin_text %> &rarr; <%= q.destination_text %></td>
+                  <td>KES <%= Number(q.price_kes).toLocaleString() %></td>
+                  <td><span class="badge badge-<%= q.status === 'pending' ? 'filling' : (q.status === 'accepted' ? 'confirmed' : 'cancelled') %>"><%= q.status.charAt(0).toUpperCase() + q.status.slice(1) %></span></td>
+                  <td><a href="/operator/group-trips/<%= q.group_request_id %>">Manage</a></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

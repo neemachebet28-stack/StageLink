@@ -1,0 +1,41 @@
+<%
+  const adminLinks = [
+    ['/admin', 'Dashboard'], ['/admin/users', 'Users'], ['/admin/operators', 'Operators'],
+    ['/admin/counties', 'Counties'], ['/admin/towns', 'Towns'], ['/admin/stages', 'Stages'],
+    ['/admin/routes', 'Routes'], ['/admin/vehicles', 'Vehicles'], ['/admin/drivers', 'Drivers'],
+    ['/admin/trips', 'Trips'], ['/admin/bookings', 'Bookings'], ['/admin/payments', 'Payments'],
+    ['/admin/group-requests', 'Group Requests'], ['/admin/subscriptions', 'Subscriptions'],
+    ['/admin/reviews', 'Reviews'], ['/admin/notifications', 'Notifications'],
+    ['/admin/audit-logs', 'Audit Logs'], ['/admin/settings', 'Settings'],
+  ];
+%>
+<aside class="op-sidebar" data-op-sidebar>
+  <div class="op-sidebar-brand">
+    <span class="nav-logo-mark" aria-hidden="true">SL</span>
+    <span>StageLink Admin</span>
+  </div>
+
+  <nav class="op-sidebar-nav" aria-label="Admin navigation">
+    <% adminLinks.forEach(function (link) {
+         const active = link[0] === '/admin' ? currentPath === '/admin' : currentPath.startsWith(link[0]); %>
+      <a href="<%= link[0] %>" class="<%= active ? 'is-active' : '' %>"><%= link[1] %><% if (link[1] === 'Notifications') { %> <span class="notif-badge notif-badge-inline" data-notif-count hidden>0</span><% } %></a>
+    <% }); %>
+  </nav>
+
+  <div class="op-sidebar-footer">
+    <a href="/" class="op-sidebar-footer-link">View public site</a>
+    <form method="post" action="/logout">
+      <button type="submit" class="op-sidebar-footer-link" style="background:none; border:none; padding:0; cursor:pointer; font: inherit;">Sign out</button>
+    </form>
+  </div>
+</aside>
+
+<div class="op-sidebar-backdrop" data-op-sidebar-backdrop hidden></div>
+
+<header class="op-topbar">
+  <button type="button" class="op-topbar-toggle" data-op-sidebar-toggle aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <span class="op-topbar-title"><%= typeof title !== 'undefined' ? title : 'Admin' %></span>
+  <span style="margin-left:auto;"><%- include('notificationBell', { href: '/admin/notifications' }) %></span>
+</header>

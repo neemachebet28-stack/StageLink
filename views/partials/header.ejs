@@ -1,0 +1,42 @@
+<header class="site-header" data-site-header>
+  <div class="container">
+    <nav class="nav" aria-label="Primary">
+      <a href="/" class="nav-logo">
+        <span class="nav-logo-mark" aria-hidden="true">SL</span>
+        <span><%= appName %></span>
+      </a>
+
+      <div class="nav-links">
+        <a href="/discover">Discover stages</a>
+        <a href="/operators">Operators</a>
+        <a href="/destinations">Destinations</a>
+        <a href="/group-trips">Group transport</a>
+        <a href="/#trust">Trust &amp; safety</a>
+      </div>
+
+      <div class="nav-actions">
+        <%- include('notificationBell', { href: '/notifications' }) %>
+        <button
+          type="button"
+          class="nav-toggle"
+          data-nav-toggle
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="mobile-nav-panel"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </nav>
+
+    <div class="nav-mobile-panel" id="mobile-nav-panel">
+      <a href="/discover">Discover stages</a>
+      <a href="/operators">Operators</a>
+      <a href="/destinations">Destinations</a>
+      <a href="/group-trips">Group transport</a>
+      <a href="/#trust">Trust &amp; safety</a>
+    </div>
+  </div>
+</header>

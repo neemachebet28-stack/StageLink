@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/operatorHeader') %>
+
+  <main class="op-main">
+    <section class="page-header">
+      <div class="container">
+        <div class="op-toolbar" style="margin-top: 0;">
+          <div>
+            <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">Drivers</h1>
+            <p class="lede">Your boarding staff.</p>
+          </div>
+          <a href="/operator/drivers/new" class="btn btn-primary">New driver</a>
+        </div>
+      </div>
+    </section>
+    <section style="padding-top: 0;">
+      <div class="container">
+        <% if (drivers.length === 0) { %>
+          <div class="empty-state">No drivers yet.</div>
+        <% } else { %>
+          <table class="op-table">
+            <thead><tr><th>Name</th><th>Phone</th><th>License</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <% drivers.forEach(function (d) { %>
+                <tr>
+                  <td><%= d.full_name %></td>
+                  <td><%= d.phone || '—' %></td>
+                  <td><%= d.license_number || '—' %></td>
+                  <td><span class="badge badge-<%= d.status === 'active' ? 'boarding' : 'expired' %>"><%= d.status.charAt(0).toUpperCase() + d.status.slice(1) %></span></td>
+                  <td><a href="/operator/drivers/<%= d.id %>/edit">Manage</a></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

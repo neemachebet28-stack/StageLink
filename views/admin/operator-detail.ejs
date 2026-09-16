@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/adminHeader') %>
+
+  <main class="op-main">
+    <section class="page-header">
+      <div class="container" style="max-width: 640px;">
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/admin/operators">Operators</a><span class="sep">/</span><span><%= organization.name %></span></nav>
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);"><%= organization.name %></h1>
+        <p class="lede"><%= organization.description || 'No description on file.' %></p>
+
+        <div class="list-rows" style="margin-top: var(--space-6);">
+          <div class="list-row"><div class="list-row-title">Verification</div><span class="badge badge-<%= organization.verification_status %>"><%= organization.verification_status.charAt(0).toUpperCase() + organization.verification_status.slice(1) %></span></div>
+          <div class="list-row"><div class="list-row-title">Status</div><span class="badge badge-<%= organization.status === 'active' ? 'boarding' : 'expired' %>"><%= organization.status.charAt(0).toUpperCase() + organization.status.slice(1) %></span></div>
+          <div class="list-row"><div class="list-row-title">Contact</div><div class="list-row-meta"><%= organization.contact_email || '—' %><% if (organization.contact_phone) { %> · <%= organization.contact_phone %><% } %></div></div>
+          <div class="list-row"><div class="list-row-title">Reviews</div><div class="list-row-meta"><%= reviewSummary.count %> published<% if (reviewSummary.average) { %>, average <%= reviewSummary.average.toFixed(1) %>/5<% } %></div></div>
+        </div>
+
+        <h2 class="h3" style="margin-top: var(--space-8);">Verification status</h2>
+        <p class="small-text">This is the only thing that controls the verified badge passengers see — set it deliberately. Every change is recorded in the audit log.</p>
+        <form class="op-form" method="post" action="/admin/operators/<%= organization.id %>/verification">
+          <div class="op-field">
+            <select name="verificationStatus" aria-label="Verification status">
+              <% ['unverified','pending','verified','rejected'].forEach(function (s) { %>
+                <option value="<%= s %>" <%= organization.verification_status === s ? 'selected' : '' %>><%= s.charAt(0).toUpperCase() + s.slice(1) %></option>
+              <% }); %>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Update verification</button>
+        </form>
+
+        <h2 class="h3" style="margin-top: var(--space-8);">Account status</h2>
+        <form class="op-form" method="post" action="/admin/operators/<%= organization.id %>/status">
+          <div class="op-field">
+            <select name="status" aria-label="Account status">
+              <% ['active','suspended','archived'].forEach(function (s) { %>
+                <option value="<%= s %>" <%= organization.status === s ? 'selected' : '' %>><%= s.charAt(0).toUpperCase() + s.slice(1) %></option>
+              <% }); %>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-secondary">Update status</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

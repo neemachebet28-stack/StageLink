@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main>
+    <section class="page-header">
+      <div class="container" style="max-width: 480px;">
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">Leave a review</h1>
+        <p class="lede"><%= booking.origin_stage_name %> &rarr; <%= booking.destination_name %> with <%= booking.organization_name %></p>
+        <p class="small-text" style="margin-top: var(--space-2);">You can review this because your trip was marked completed.</p>
+
+        <% if (error) { %><div class="op-error" style="margin-top: var(--space-6);" role="alert"><%= error %></div><% } %>
+
+        <form class="op-form" method="post" action="/bookings/<%= reference %>/review">
+          <div class="op-field">
+            <label for="rating">Rating</label>
+            <select id="rating" name="rating" required>
+              <option value="">Select a rating</option>
+              <option value="5">5 — Excellent</option>
+              <option value="4">4 — Good</option>
+              <option value="3">3 — Okay</option>
+              <option value="2">2 — Poor</option>
+              <option value="1">1 — Very poor</option>
+            </select>
+          </div>
+          <div class="op-field">
+            <label for="comment">Comment <span class="small-text">(optional)</span></label>
+            <input type="text" id="comment" name="comment" maxlength="1000">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit review</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

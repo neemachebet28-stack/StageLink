@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main>
+    <section class="page-header">
+      <div class="container" style="max-width: 720px;">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="/bookings/<%= reference %>">Booking <%= reference %></a>
+          <span class="sep">/</span>
+          <span>Ticket</span>
+        </nav>
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">Your ticket</h1>
+        <p class="lede">
+          <%= tickets.length %> seat<%= tickets.length === 1 ? '' : 's' %> · <%= tickets[0].origin_stage_name %> &rarr; <%= tickets[0].destination_name %>
+        </p>
+
+        <div class="ticket-actions">
+          <button type="button" class="btn btn-primary" onclick="window.print()">Print / Save as PDF</button>
+          <a href="/bookings/<%= reference %>" class="btn btn-secondary">Back to booking</a>
+        </div>
+
+        <% tickets.forEach(function (ticket) { %>
+          <div class="ticket-card">
+            <div class="ticket-header">
+              <div class="ticket-brand">
+                <span class="nav-logo-mark" aria-hidden="true">SL</span>
+                <span>StageLink</span>
+              </div>
+              <div class="ticket-operator">
+                <div class="ticket-operator-name"><%= ticket.organization_name %></div>
+                <span class="badge badge-<%= ticket.verification_status %>" style="margin-top: 4px;">
+                  <%= ticket.verification_status.charAt(0).toUpperCase() + ticket.verification_status.slice(1) %>
+                </span>
+              </div>
+            </div>
+
+            <div class="ticket-body">
+              <div class="ticket-fields">
+                <div>
+                  <div class="ticket-field-label">Booking number</div>
+                  <div class="ticket-field-value"><%= ticket.ticket_number %></div>
+                </div>
+                <div>
+                  <div class="ticket-field-label">Passenger</div>
+                  <div class="ticket-field-value"><%= ticket.passenger_name %></div>
+                </div>
+                <div>
+                  <div class="ticket-field-label">Phone</div>
+                  <div class="ticket-field-value"><%= ticket.passenger_phone %></div>
+                </div>
+                <div>
+                  <div class="ticket-field-label">Seat</div>
+                  <div class="ticket-field-value"><%= ticket.seat_number %></div>
+                </div>
+                <div>
+                  <div class="ticket-field-label">Boarding stage / Origin</div>
+                  <div class="ticket-field-value"><%= ticket.origin_stage_name %></div>
+                </div>
+                <div>
+                  <div class="ticket-field-label">Destination</div>
+                  <div class="ticket-field-value"><%= ticket.destination_name %></div>
+                </div>
+                <div>
+                  <div class="ticket-field-label">Vehicle registration</div>
+                  <div class="ticket-field-value"><%= ticket.registration_number %></div>
+                </div>
+                <div>
+                  <div class="ticket-field-label">Travel date</div>
+                  <div class="ticket-field-value"><%= formatDateTime(ticket.scheduled_departure) %></div>
+                </div>
+                <div>
+                  <div class="ticket-field-label">Scheduled departure</div>
+                  <div class="ticket-field-value"><%= formatDateTime(ticket.scheduled_departure) %></div>
+                </div>
+                <div>
+                  <div class="ticket-field-label">Estimated departure</div>
+                  <div class="ticket-field-value"><%= ticket.estimated_departure ? formatDateTime(ticket.estimated_departure) : 'Not yet available' %></div>
+                </div>
+                <div>
+                  <div class="ticket-field-label">Trip status</div>
+                  <div class="ticket-field-value">
+                    <span class="badge badge-<%= ticket.trip_status %>"><%= ticket.trip_status.charAt(0).toUpperCase() + ticket.trip_status.slice(1) %></span>
+                  </div>
+                </div>
+                <div>
+                  <div class="ticket-field-label">Amount paid</div>
+                  <div class="ticket-field-value">KES <%= Number(ticket.fare_kes).toLocaleString() %></div>
+                </div>
+                <div>
+                  <div class="ticket-field-label">Payment method</div>
+                  <div class="ticket-field-value">M-Pesa<% if (ticket.payer_phone) { %> (<%= ticket.payer_phone %>)<% } %></div>
+                </div>
+                <div>
+                  <div class="ticket-field-label">Transaction reference</div>
+                  <div class="ticket-field-value"><%= ticket.mpesa_receipt_number || '—' %></div>
+                </div>
+                <div>
+                  <div class="ticket-field-label">Payment status</div>
+                  <div class="ticket-field-value">
+                    <span class="badge badge-<%= ticket.payment_status || 'pending' %>"><%= (ticket.payment_status || 'pending').charAt(0).toUpperCase() + (ticket.payment_status || 'pending').slice(1) %></span>
+                  </div>
+                </div>
+                <div>
+                  <div class="ticket-field-label">Ticket status</div>
+                  <div class="ticket-field-value">
+                    <span class="badge badge-<%= ticket.ticket_status %>"><%= ticket.ticket_status.charAt(0).toUpperCase() + ticket.ticket_status.slice(1) %></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ticket-qr-block">
+                <img src="<%= ticket.qrDataUrl %>" alt="Ticket QR code" width="180" height="180">
+                <span class="small-text">Scan at boarding</span>
+              </div>
+            </div>
+
+            <div class="ticket-footer">
+              From <%= ticket.organization_name %>, we wish you safe and wonderful travels.
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

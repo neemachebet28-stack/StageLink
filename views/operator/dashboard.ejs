@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/operatorHeader') %>
+
+  <main class="op-main">
+    <section class="page-header">
+      <div class="container">
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">Welcome back</h1>
+        <p class="lede"><%= currentUser.organizationName %></p>
+
+        <div class="op-stats">
+          <div class="op-stat-card">
+            <div class="op-stat-value"><%= metrics.todaysTrips %></div>
+            <div class="op-stat-label">Today's trips</div>
+          </div>
+          <div class="op-stat-card">
+            <div class="op-stat-value"><%= metrics.todaysBookings %></div>
+            <div class="op-stat-label">Today's bookings</div>
+          </div>
+          <div class="op-stat-card">
+            <div class="op-stat-value"><%= metrics.seatsSold %></div>
+            <div class="op-stat-label">Seats sold (confirmed)</div>
+          </div>
+          <div class="op-stat-card">
+            <div class="op-stat-value">KES <%= metrics.revenueKes.toLocaleString() %></div>
+            <div class="op-stat-label">Revenue (paid)</div>
+          </div>
+          <div class="op-stat-card">
+            <div class="op-stat-value"><%= metrics.activeTrips %></div>
+            <div class="op-stat-label">Active trips</div>
+          </div>
+          <div class="op-stat-card">
+            <div class="op-stat-value"><%= metrics.pendingPayments %></div>
+            <div class="op-stat-label">Payments in progress</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="op-toolbar">
+          <h2 class="h2">Next 5 trips</h2>
+          <a href="/operator/trips/new" class="btn btn-primary">New trip</a>
+        </div>
+
+        <% if (trips.length === 0) { %>
+          <div class="empty-state" style="margin-top: var(--space-6);">
+            No upcoming trips yet. Create your first one to get started.
+          </div>
+        <% } else { %>
+          <table class="op-table">
+            <thead>
+              <tr>
+                <th>Route</th>
+                <th>Departure</th>
+                <th>Vehicle</th>
+                <th>Seats</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% trips.forEach(function (trip) { %>
+                <tr>
+                  <td><%= trip.origin_stage_name %> &rarr; <%= trip.destination_name %></td>
+                  <td><%= formatDateTime(trip.scheduled_departure) %></td>
+                  <td><%= trip.registration_number %></td>
+                  <td><%= trip.total_seats - trip.available_seats %> / <%= trip.total_seats %></td>
+                  <td><span class="badge badge-<%= trip.status %>"><%= trip.status.charAt(0).toUpperCase() + trip.status.slice(1) %></span></td>
+                  <td><a href="/operator/trips/<%= trip.id %>/edit">Manage</a></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

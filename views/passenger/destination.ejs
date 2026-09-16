@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="/destinations">Destinations</a>
+          <span class="sep">/</span>
+          <span><%= destination.name %></span>
+        </nav>
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);"><%= destination.name %></h1>
+        <p class="lede"><%= destination.county_name %> County</p>
+        <% if (destination.description) { %>
+          <p class="body-text" style="margin-top: var(--space-2);"><%= destination.description %></p>
+        <% } %>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2 class="h2">Routes to <%= destination.name %></h2>
+
+        <% if (routes.length === 0) { %>
+          <div class="empty-state" style="margin-top: var(--space-6);">
+            No routes currently run to <%= destination.name %>.
+          </div>
+        <% } else { %>
+          <div class="list-rows" style="margin-top: var(--space-6);">
+            <% routes.forEach(function (r) { %>
+              <a class="list-row" href="/routes/<%= r.id %>">
+                <div>
+                  <div class="list-row-title">From <%= r.origin_stage_name %>, <%= r.origin_town_name %></div>
+                  <div class="list-row-meta">
+                    <%= r.organization_name %>
+                    <span class="badge badge-<%= r.verification_status %>" style="margin-left: 6px;">
+                      <%= r.verification_status.charAt(0).toUpperCase() + r.verification_status.slice(1) %>
+                    </span>
+                  </div>
+                </div>
+                <% if (r.base_fare_kes) { %>
+                  <div class="list-row-action">KES <%= Number(r.base_fare_kes).toLocaleString() %></div>
+                <% } %>
+              </a>
+            <% }); %>
+          </div>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

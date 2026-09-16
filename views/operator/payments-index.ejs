@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/operatorHeader') %>
+
+  <main class="op-main">
+    <section class="page-header">
+      <div class="container">
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">Payments</h1>
+        <p class="lede">Every M-Pesa payment attempt for your bookings.</p>
+      </div>
+    </section>
+    <section style="padding-top: 0;">
+      <div class="container">
+        <% if (payments.length === 0) { %>
+          <div class="empty-state">No payments yet.</div>
+        <% } else { %>
+          <table class="op-table">
+            <thead><tr><th>Reference</th><th>Phone</th><th>Amount</th><th>Receipt</th><th>Status</th><th>Date</th></tr></thead>
+            <tbody>
+              <% payments.forEach(function (p) { %>
+                <tr>
+                  <td><%= p.booking_reference %></td>
+                  <td><%= p.phone_number %></td>
+                  <td>KES <%= Number(p.amount_kes).toLocaleString() %></td>
+                  <td><%= p.mpesa_receipt_number || '—' %></td>
+                  <td><span class="badge badge-<%= p.status %>"><%= p.status.charAt(0).toUpperCase() + p.status.slice(1) %></span></td>
+                  <td><%= formatDateTime(p.created_at) %></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

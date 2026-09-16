@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/operatorHeader') %>
+
+  <main class="op-main">
+    <section class="page-header">
+      <div class="container" style="max-width: 560px;">
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">New route</h1>
+        <% if (error) { %><div class="op-error" style="margin-top: var(--space-6);"><%= error %></div><% } %>
+
+        <% if (stages.length === 0) { %>
+          <div class="empty-state" style="margin-top: var(--space-6);">
+            Add a stage to your service area first.
+            <a href="/operator/stages/new" style="color: var(--color-primary); font-weight: 600;">Add a stage</a>.
+          </div>
+        <% } else { %>
+          <form class="op-form" method="post" action="/operator/routes">
+            <div class="op-field">
+              <label for="originStageId">Origin stage</label>
+              <select id="originStageId" name="originStageId" required>
+                <option value="">Select an origin</option>
+                <% stages.forEach(function (s) { %>
+                  <option value="<%= s.stage_id %>"><%= s.name %> (<%= s.town_name %>)</option>
+                <% }); %>
+              </select>
+            </div>
+            <div class="op-field">
+              <label for="destinationId">Destination</label>
+              <select id="destinationId" name="destinationId" required>
+                <option value="">Select a destination</option>
+                <% destinations.forEach(function (d) { %>
+                  <option value="<%= d.id %>"><%= d.name %></option>
+                <% }); %>
+              </select>
+            </div>
+            <div class="op-field">
+              <label for="name">Display name <span class="small-text">(optional)</span></label>
+              <input type="text" id="name" name="name" placeholder="e.g. Nairobi – Kisumu">
+            </div>
+            <div class="op-field">
+              <label for="distanceKm">Distance (km) <span class="small-text">(optional)</span></label>
+              <input type="number" id="distanceKm" name="distanceKm" step="0.1" min="0">
+            </div>
+            <div class="op-field">
+              <label for="durationMinutes">Typical duration (minutes) <span class="small-text">(optional)</span></label>
+              <input type="number" id="durationMinutes" name="durationMinutes" min="0">
+            </div>
+            <div class="op-field">
+              <label for="baseFareKes">Base fare (KES) <span class="small-text">(optional)</span></label>
+              <input type="number" id="baseFareKes" name="baseFareKes" min="0" step="1">
+            </div>
+            <button type="submit" class="btn btn-primary">Create route</button>
+          </form>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

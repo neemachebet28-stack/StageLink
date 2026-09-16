@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/adminHeader') %>
+
+  <main class="op-main">
+    <section class="page-header">
+      <div class="container">
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">Audit Logs</h1>
+        <p class="lede">Every administrative action that changed platform state, most recent first.</p>
+      </div>
+    </section>
+    <section style="padding-top: 0;">
+      <div class="container">
+        <% if (logs.length === 0) { %>
+          <div class="empty-state">No administrative actions recorded yet.</div>
+        <% } else { %>
+          <table class="op-table">
+            <thead><tr><th>When</th><th>Admin</th><th>Action</th><th>Target</th><th>Details</th></tr></thead>
+            <tbody>
+              <% logs.forEach(function (l) { %>
+                <tr>
+                  <td><%= formatDateTime(l.created_at) %></td>
+                  <td><%= l.actor_name %></td>
+                  <td><%= l.action %></td>
+                  <td><%= l.target_type %> #<%= l.target_id %></td>
+                  <td style="max-width: 320px; white-space: normal; font-size: 0.82rem; color: var(--color-text-faint);"><%= l.details %></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

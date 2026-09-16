@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/adminHeader') %>
+
+  <main class="op-main">
+    <section class="page-header">
+      <div class="container" style="max-width: 480px;">
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">Settings</h1>
+        <p class="lede">Operational configuration. There's no persisted platform-settings store yet, so this reflects real environment state rather than an editable form.</p>
+
+        <div class="list-rows" style="margin-top: var(--space-6);">
+          <div class="list-row"><div class="list-row-title">App name</div><div class="list-row-meta"><%= appName %></div></div>
+          <div class="list-row"><div class="list-row-title">Environment</div><div class="list-row-meta"><%= environment %></div></div>
+          <div class="list-row"><div class="list-row-title">M-Pesa</div><div class="list-row-meta"><%= mpesaSandbox ? 'Sandbox simulation (no credentials configured)' : 'Live Daraja credentials configured' %></div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

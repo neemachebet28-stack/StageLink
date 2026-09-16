@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/driverHeader') %>
+
+  <main class="drv-container">
+    <div class="drv-page-title">Verify ticket</div>
+    <div class="drv-page-sub"><%= trip.origin_stage_name %> &rarr; <%= trip.destination_name %></div>
+
+    <% if (error) { %><div class="op-error"><%= error %></div><% } %>
+
+    <div data-camera-wrap hidden>
+      <video data-camera-video style="width: 100%; border-radius: var(--radius-card); background: #000; margin-bottom: var(--space-3);" muted playsinline></video>
+    </div>
+
+    <form method="post" action="/driver/trips/<%= trip.id %>/verify" data-verify-form>
+      <input type="text" id="token" name="token" class="drv-scan-input" autocomplete="off" autofocus placeholder="Scan or paste ticket code">
+      <p class="op-field-hint" data-camera-hint style="margin-bottom: var(--space-3);">Starting camera scanner if supported…</p>
+      <button type="submit" class="btn btn-primary" style="width: 100%; min-height: 52px;">Verify</button>
+    </form>
+
+    <% if (scanResult) { %>
+      <% const resultTone = {
+           valid: 'Valid ticket', boarded: 'Boarded', already_boarded: 'Already boarded',
+           invalid: 'Invalid ticket', cancelled: 'Cancelled', expired: 'Expired',
+         }[scanResult] || scanResult; %>
+      <div class="drv-result-card">
+        <div class="drv-result-banner <%= scanResult %>"><%= resultTone %></div>
+        <% if (ticket) { %>
+          <div class="drv-result-body">
+            <div class="drv-result-field"><span>Passenger</span><strong><%= ticket.passenger_name %></strong></div>
+            <div class="drv-result-field"><span>Booking</span><strong><%= ticket.ticket_number %></strong></div>
+            <div class="drv-result-field"><span>Seat</span><strong><%= ticket.seat_number %></strong></div>
+            <div class="drv-result-field"><span>Payment</span><span class="badge badge-<%= ticket.payment_status || 'pending' %>"><%= (ticket.payment_status || 'pending').charAt(0).toUpperCase() + (ticket.payment_status || 'pending').slice(1) %></span></div>
+
+            <% if (scanResult === 'valid') { %>
+              <form method="post" action="/driver/trips/<%= trip.id %>/verify/<%= ticket.ticket_id %>/board">
+                <button type="submit" class="btn btn-primary drv-board-button">Mark passenger BOARDED</button>
+              </form>
+            <% } %>
+          </div>
+        <% } else { %>
+          <div class="drv-result-body">
+            <p class="body-text">This code doesn't match a valid ticket for this trip.</p>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+  </main>
+
+  <%- include('../partials/scripts') %>
+</body>
+</html>

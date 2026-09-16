@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <main>
+    <section class="page-header" style="padding-bottom: var(--space-16);">
+      <div class="container" style="max-width: 420px;">
+        <h1 class="h2">Operator sign in</h1>
+        <p class="body-text" style="margin-top: 8px;">
+          For registered transport operators to manage their trips.
+        </p>
+
+        <% if (error) { %>
+          <div class="empty-state" style="margin-top: var(--space-6); border-color: var(--color-error); color: var(--color-error); text-align: left;">
+            <%= error %>
+          </div>
+        <% } %>
+
+        <form method="post" action="/login" style="margin-top: var(--space-6); display: flex; flex-direction: column; gap: var(--space-4);">
+          <div>
+            <label class="small-text" for="email" style="display:block; margin-bottom: 6px;">Email</label>
+            <input class="search-input" style="width: 100%;" type="email" id="email" name="email" value="<%= email %>" required autofocus>
+          </div>
+          <div>
+            <label class="small-text" for="password" style="display:block; margin-bottom: 6px;">Password</label>
+            <input class="search-input" style="width: 100%;" type="password" id="password" name="password" required>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Sign in</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <%- include('partials/footer') %>
+  <%- include('partials/scripts') %>
+</body>
+</html>

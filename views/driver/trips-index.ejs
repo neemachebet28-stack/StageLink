@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/driverHeader') %>
+
+  <main class="drv-container">
+    <div class="drv-page-title">My trips</div>
+    <div class="drv-page-sub"><%= currentUser.organizationName %></div>
+
+    <% if (trips.length === 0) { %>
+      <div class="empty-state">No trips assigned to you yet.</div>
+    <% } else { %>
+      <% trips.forEach(function (t) { %>
+        <a class="drv-trip-card" href="/driver/trips/<%= t.id %>">
+          <div class="drv-trip-card-top">
+            <div>
+              <div class="drv-trip-route"><%= t.origin_stage_name %> &rarr; <%= t.destination_name %></div>
+              <div class="drv-trip-meta"><%= t.registration_number %></div>
+            </div>
+            <span class="badge badge-<%= t.status %>"><%= t.status.charAt(0).toUpperCase() + t.status.slice(1) %></span>
+          </div>
+          <div class="drv-trip-stats">
+            <span><%= formatDateTime(t.scheduled_departure) %></span>
+            <span><%= t.total_seats - t.available_seats %> / <%= t.total_seats %> seats</span>
+          </div>
+        </a>
+      <% }); %>
+    <% } %>
+  </main>
+
+  <%- include('../partials/scripts') %>
+</body>
+</html>

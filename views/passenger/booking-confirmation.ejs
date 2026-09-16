@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main>
+    <section class="page-header">
+      <div class="container" style="max-width: 560px;">
+        <span class="badge badge-<%= bookings[0].status %>" style="margin-bottom: var(--space-4); display: inline-flex;">
+          <%= bookings[0].status.charAt(0).toUpperCase() + bookings[0].status.slice(1) %>
+        </span>
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">Reference <%= reference %></h1>
+        <p class="lede">
+          <%= bookings[0].origin_stage_name %> &rarr; <%= bookings[0].destination_name %> ·
+          <%= bookings[0].organization_name %>
+        </p>
+        <%- include('../partials/trustBadge', { status: bookings[0].verification_status, summary: operatorSummary }) %>
+
+        <div class="list-rows" style="margin-top: var(--space-6);">
+          <div class="list-row">
+            <div class="list-row-title">Passenger</div>
+            <div class="list-row-meta"><%= bookings[0].passenger_name %> · <%= bookings[0].passenger_phone %></div>
+          </div>
+          <div class="list-row">
+            <div class="list-row-title">Vehicle</div>
+            <div class="list-row-meta"><%= bookings[0].registration_number %></div>
+          </div>
+          <div class="list-row">
+            <div class="list-row-title">Scheduled departure</div>
+            <div class="list-row-meta"><%= formatDateTime(bookings[0].scheduled_departure) %></div>
+          </div>
+          <div class="list-row">
+            <div class="list-row-title">Seats</div>
+            <div class="list-row-meta"><%= bookings.map(b => b.seat_number).join(', ') %></div>
+          </div>
+          <div class="list-row">
+            <div class="list-row-title">Total fare</div>
+            <div class="list-row-meta">KES <%= bookings.reduce((sum, b) => sum + Number(b.fare_kes), 0).toLocaleString() %></div>
+          </div>
+          <div class="list-row">
+            <div class="list-row-title">Status</div>
+            <span class="badge badge-<%= bookings[0].status %>"><%= bookings[0].status.charAt(0).toUpperCase() + bookings[0].status.slice(1) %></span>
+          </div>
+        </div>
+
+        <% if (bookings[0].status === 'pending') { %>
+          <div class="empty-state" style="margin-top: var(--space-6); text-align: left;">
+            This reserves your seat — it isn't paid yet. Complete payment before it expires to
+            confirm it. Keep this reference: <strong><%= reference %></strong>.
+          </div>
+          <a href="/bookings/<%= reference %>/pay" class="btn btn-primary" style="margin-top: var(--space-4); width: 100%;">Pay with M-Pesa</a>
+        <% } else if (bookings[0].status === 'confirmed') { %>
+          <div class="empty-state" style="margin-top: var(--space-6); text-align: left; border-color: var(--color-primary); color: var(--color-primary);">
+            Paid and confirmed. Your ticket with QR code is ready.
+          </div>
+          <a href="/bookings/<%= reference %>/ticket" class="btn btn-primary" style="margin-top: var(--space-4); width: 100%;">View ticket</a>
+        <% } else if (bookings[0].status === 'completed') { %>
+          <div class="empty-state" style="margin-top: var(--space-6); text-align: left; border-color: var(--color-primary); color: var(--color-primary);">
+            This trip has been completed. We hope it went well!
+          </div>
+          <a href="/bookings/<%= reference %>/review" class="btn btn-primary" style="margin-top: var(--space-4); width: 100%;">Leave a review</a>
+        <% } else if (bookings[0].status === 'expired') { %>
+          <div class="empty-state" style="margin-top: var(--space-6); text-align: left; border-color: var(--color-error); color: var(--color-error);">
+            This booking expired before payment was completed and the seat has been released.
+            <a href="/trips/<%= bookings[0].trip_id %>" style="color: var(--color-error); font-weight: 600;">Select a seat again</a>.
+          </div>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

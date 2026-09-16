@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/adminHeader') %>
+
+  <main class="op-main">
+    <section class="page-header">
+      <div class="container">
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">Reviews</h1>
+        <p class="lede">Moderation queue — only from passengers who actually completed the trip.</p>
+        <form method="get" style="margin-top: var(--space-4);">
+          <select name="status" onchange="this.form.submit()" aria-label="Filter by status" style="padding: 8px 12px; border-radius: var(--radius-input); border: 1px solid var(--color-border);">
+            <option value="">All statuses</option>
+            <% ['published','hidden','flagged'].forEach(function (s) { %>
+              <option value="<%= s %>" <%= status === s ? 'selected' : '' %>><%= s.charAt(0).toUpperCase() + s.slice(1) %></option>
+            <% }); %>
+          </select>
+        </form>
+      </div>
+    </section>
+    <section style="padding-top: 0;">
+      <div class="container">
+        <% if (reviews.length === 0) { %>
+          <div class="empty-state">No reviews match.</div>
+        <% } else { %>
+          <table class="op-table">
+            <thead><tr><th>Operator</th><th>Passenger</th><th>Route</th><th>Rating</th><th>Comment</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <% reviews.forEach(function (r) { %>
+                <tr>
+                  <td><%= r.organization_name %></td>
+                  <td><%= r.passenger_name %></td>
+                  <td><%= r.origin_stage_name %> &rarr; <%= r.destination_name %></td>
+                  <td><%= r.rating %>/5</td>
+                  <td style="max-width: 240px; white-space: normal;"><%= r.comment || '—' %></td>
+                  <td><span class="badge badge-<%= r.status === 'published' ? 'boarding' : (r.status === 'flagged' ? 'cancelled' : 'expired') %>"><%= r.status.charAt(0).toUpperCase() + r.status.slice(1) %></span></td>
+                  <td>
+                    <form method="post" action="/admin/reviews/<%= r.id %>/status" style="display:flex; gap:4px;">
+                      <select name="status" aria-label="Set status" style="padding:4px;">
+                        <% ['published','hidden','flagged'].forEach(function (s) { %>
+                          <option value="<%= s %>" <%= r.status === s ? 'selected' : '' %>><%= s %></option>
+                        <% }); %>
+                      </select>
+                      <button type="submit" class="btn btn-secondary" style="padding:4px 10px; font-size:0.8rem;">Set</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

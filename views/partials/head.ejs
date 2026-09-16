@@ -1,0 +1,17 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= typeof title !== 'undefined' ? title + ' · ' + appName : appName %></title>
+<meta name="description" content="StageLink digitizes the Kenyan matatu and shuttle stage experience — discover stages, compare operators, see real trip status, and book your seat before you reach the stage.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/passenger.css">
+<link rel="stylesheet" href="/css/notifications.css">
+<% if (typeof currentPath !== 'undefined' && (currentPath.startsWith('/operator') || currentPath.startsWith('/admin'))) { %>
+  <link rel="stylesheet" href="/css/operator.css">
+<% } %>
+<% if (typeof currentPath !== 'undefined' && currentPath.startsWith('/driver')) { %>
+  <link rel="stylesheet" href="/css/driver.css">
+<% } %>
+<link rel="icon" href="data:,">

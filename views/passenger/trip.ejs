@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="/stages/<%= trip.origin_stage_id %>"><%= trip.origin_stage_name %></a>
+          <span class="sep">/</span>
+          <span><%= trip.destination_name %></span>
+        </nav>
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">
+          <%= trip.origin_stage_name %> &rarr; <%= trip.destination_name %>
+        </h1>
+        <p class="lede">
+          <%= trip.organization_name %>
+          <span class="badge badge-<%= trip.status %>" style="margin-left: 6px;">
+            <%= trip.status.charAt(0).toUpperCase() + trip.status.slice(1) %>
+          </span>
+        </p>
+        <p style="margin-top: var(--space-2);"><%- include('../partials/trustBadge', { status: trip.verification_status, explain: true, summary: { count: trip.review_count, average: trip.review_average } }) %></p>
+        <p class="body-text" style="margin-top: 8px;">
+          Scheduled <%= formatDateTime(trip.scheduled_departure) %>
+          <% if (trip.estimated_departure) { %> · Estimated <%= formatDateTime(trip.estimated_departure) %><% } %>
+          · <%= trip.registration_number %><% if (trip.vehicle_type) { %> (<%= trip.vehicle_type %>)<% } %>
+          · KES <%= Number(trip.fare_kes).toLocaleString() %> per seat
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <% if (!isBookable) { %>
+          <div class="empty-state">
+            This trip is no longer accepting seat selections
+            (<%= ['departed','arrived','cancelled'].includes(trip.status) ? 'status: ' + trip.status : 'departure time has passed' %>).
+          </div>
+        <% } else { %>
+          <div class="seat-map-panel" data-seat-map data-trip-id="<%= trip.id %>" data-fare="<%= trip.fare_kes %>">
+            <div class="seat-map-legend">
+              <span class="seat-map-legend-item"><span class="seat-map-legend-swatch" style="background: var(--color-surface);"></span> Available</span>
+              <span class="seat-map-legend-item"><span class="seat-map-legend-swatch" style="background: var(--color-primary);"></span> Your selection</span>
+              <span class="seat-map-legend-item"><span class="seat-map-legend-swatch" style="background: var(--color-warning-tint); border-color: var(--color-warning);"></span> Held by someone else</span>
+              <span class="seat-map-legend-item"><span class="seat-map-legend-swatch" style="background: var(--color-bg); border-style: dashed;"></span> Booked</span>
+            </div>
+
+            <% seatRows.forEach(function (row) { %>
+              <div class="seat-row">
+                <% row.rowSeats.forEach(function (seat) { %>
+                  <button
+                    type="button"
+                    class="seat-button"
+                    data-seat-id="<%= seat.id %>"
+                    data-seat-status="<%= seat.status %>"
+                    data-held-by-you="<%= !!seat.held_by_you %>"
+                    <%= (seat.status !== 'available' && !seat.held_by_you) ? 'disabled' : '' %>
+                    aria-label="Seat <%= seat.seat_number %>, <%= seat.seat_type %>, <%= seat.held_by_you ? 'held by you' : seat.status %>"
+                  ><%= seat.seat_number %></button>
+                <% }); %>
+              </div>
+            <% }); %>
+
+            <div class="seat-selection-footer">
+              <div>
+                <div class="seat-selection-status" data-selection-status></div>
+                <div class="small-text" data-hold-timer-wrap hidden>
+                  Holds expire in <span class="hold-timer" data-hold-timer>5:00</span> — select a few extra seconds to spare for checkout.
+                </div>
+              </div>
+              <a href="/trips/<%= trip.id %>/booking-summary" class="btn btn-primary" data-continue-link>
+                Continue to booking summary
+              </a>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

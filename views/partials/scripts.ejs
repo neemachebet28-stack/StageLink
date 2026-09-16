@@ -1,0 +1,10 @@
+<script src="/js/main.js"></script>
+<script src="/js/notifications.js"></script>
+<% if (typeof currentPath !== 'undefined' && (currentPath.startsWith('/operator') || currentPath.startsWith('/admin'))) { %>
+  <script src="/js/operator-shell.js"></script>
+<% } %>
+<% if (typeof pageScripts !== 'undefined') { %>
+  <% pageScripts.forEach(function (src) { %>
+    <script src="<%= src %>"></script>
+  <% }); %>
+<% } %>

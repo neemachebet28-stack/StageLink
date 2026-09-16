@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="/discover">Discover</a>
+          <span class="sep">/</span>
+          <a href="/discover/counties/<%= town.county_id %>"><%= town.county_name %></a>
+          <span class="sep">/</span>
+          <span><%= town.name %></span>
+        </nav>
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);"><%= town.name %></h1>
+        <p class="lede"><%= town.county_name %> County</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2 class="h2">Stages</h2>
+
+        <% if (stages.length === 0) { %>
+          <div class="empty-state" style="margin-top: var(--space-6);">
+            No stages are listed for <%= town.name %> yet.
+          </div>
+        <% } else { %>
+          <div class="list-rows">
+            <% stages.forEach(function (stage) { %>
+              <a class="list-row" href="/stages/<%= stage.id %>">
+                <div>
+                  <div class="list-row-title"><%= stage.name %></div>
+                  <% if (stage.landmark) { %>
+                    <div class="list-row-meta"><%= stage.landmark %></div>
+                  <% } %>
+                </div>
+                <div class="list-row-action">View stage</div>
+              </a>
+            <% }); %>
+          </div>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

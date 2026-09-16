@@ -1,0 +1,57 @@
+<%
+  // Expects a local `trip` with the shape returned by models/trips.js's
+  // TRIP_CARD_SELECT. Occupancy is derived here for display only — the
+  // underlying numbers always come from a real seats COUNT(...).
+  const seatsTaken = trip.total_seats - trip.available_seats;
+  const occupancyPct = trip.total_seats > 0 ? Math.round((seatsTaken / trip.total_seats) * 100) : 0;
+  const statusLabel = trip.status.charAt(0).toUpperCase() + trip.status.slice(1);
+%>
+<div class="trip-card">
+  <div class="trip-card-header">
+    <div>
+      <div class="trip-card-operator">
+        <%= trip.organization_name %>
+      </div>
+      <%- include('trustBadge', { status: trip.verification_status, summary: { count: trip.review_count, average: trip.review_average } }) %>
+      <div class="trip-card-route"><%= trip.origin_stage_name %> &rarr; <%= trip.destination_name %></div>
+    </div>
+    <span class="badge badge-<%= trip.status %>"><%= statusLabel %></span>
+  </div>
+
+  <div class="trip-card-grid">
+    <div>
+      <div class="trip-card-stat-label">Scheduled</div>
+      <div class="trip-card-stat-value"><%= formatDateTime(trip.scheduled_departure) %></div>
+    </div>
+    <div>
+      <div class="trip-card-stat-label">Estimated</div>
+      <div class="trip-card-stat-value">
+        <%= trip.estimated_departure ? formatDateTime(trip.estimated_departure) : 'Not yet available' %>
+      </div>
+    </div>
+    <div>
+      <div class="trip-card-stat-label">Fare</div>
+      <div class="trip-card-stat-value">KES <%= Number(trip.fare_kes).toLocaleString() %></div>
+    </div>
+    <div>
+      <div class="trip-card-stat-label">Vehicle</div>
+      <div class="trip-card-stat-value"><%= trip.registration_number %><% if (trip.vehicle_type) { %> · <%= trip.vehicle_type %><% } %></div>
+    </div>
+  </div>
+
+  <div style="margin-top: var(--space-4);">
+    <div style="display:flex; justify-content: space-between; align-items: baseline;">
+      <span class="trip-card-stat-label">Seats</span>
+      <span class="small-text"><%= trip.available_seats %> of <%= trip.total_seats %> available</span>
+    </div>
+    <div class="seat-meter">
+      <div class="seat-meter-fill" style="width: <%= occupancyPct %>%;"></div>
+    </div>
+  </div>
+
+  <% if (trip.available_seats > 0) { %>
+    <a href="/trips/<%= trip.id %>" class="btn btn-primary" style="margin-top: var(--space-4); width: 100%;">Select seats</a>
+  <% } else { %>
+    <div class="empty-state" style="margin-top: var(--space-4);">Fully booked</div>
+  <% } %>
+</div>

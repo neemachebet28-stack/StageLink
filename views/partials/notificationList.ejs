@@ -1,0 +1,50 @@
+<%
+  // Reusable list. Expects: notifications (array), returnTo (path to come back to
+  // when JavaScript is unavailable). Works identically in the public, operator
+  // and driver shells.
+  const unreadTotal = notifications.filter(function (n) { return !n.read_at; }).length;
+%>
+<div class="notif-panel" data-notif-list>
+  <div class="notif-toolbar">
+    <span class="small-text"><%= notifications.length %> shown<% if (unreadTotal > 0) { %> · <strong><%= unreadTotal %> unread</strong><% } %></span>
+    <% if (unreadTotal > 0) { %>
+      <form method="post" action="/notifications/read-all" data-notif-read-all>
+        <input type="hidden" name="returnTo" value="<%= returnTo %>">
+        <button type="submit" class="btn btn-secondary notif-readall">Mark all as read</button>
+      </form>
+    <% } %>
+  </div>
+
+  <% if (notifications.length === 0) { %>
+    <div class="empty-state">
+      Nothing here yet. You'll be notified about payments, tickets, trip changes and boarding as they happen.
+    </div>
+  <% } else { %>
+    <ul class="notif-items">
+      <% notifications.forEach(function (n) {
+           const meta = notificationMeta(n.type);
+           const unread = !n.read_at; %>
+        <li class="notif-item notif-tone-<%= meta.tone %><%= unread ? ' is-unread' : '' %>" data-notif-item="<%= n.id %>">
+          <div class="notif-meta">
+            <span class="notif-chip"><%= meta.label %></span>
+            <% if (unread) { %><span class="notif-new" data-notif-new>New</span><% } %>
+            <time class="notif-time" title="<%= n.created_at %>"><%= timeAgo(n.created_at) %></time>
+          </div>
+          <div class="notif-title"><%= n.title %></div>
+          <div class="notif-message"><%= n.message %></div>
+          <div class="notif-actions">
+            <% if (n.action_url && n.action_label) { %>
+              <a class="btn btn-primary notif-action" href="/notifications/<%= n.id %>/open"><%= n.action_label %></a>
+            <% } %>
+            <% if (unread) { %>
+              <form method="post" action="/notifications/<%= n.id %>/read" data-notif-mark-read>
+                <input type="hidden" name="returnTo" value="<%= returnTo %>">
+                <button type="submit" class="btn btn-secondary notif-action">Mark as read</button>
+              </form>
+            <% } %>
+          </div>
+        </li>
+      <% }); %>
+    </ul>
+  <% } %>
+</div>

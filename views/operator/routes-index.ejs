@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/operatorHeader') %>
+
+  <main class="op-main">
+    <section class="page-header">
+      <div class="container">
+        <div class="op-toolbar" style="margin-top: 0;">
+          <div>
+            <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">Routes</h1>
+            <p class="lede">Your standing routes.</p>
+          </div>
+          <a href="/operator/routes/new" class="btn btn-primary">New route</a>
+        </div>
+      </div>
+    </section>
+    <section style="padding-top: 0;">
+      <div class="container">
+        <% if (routes.length === 0) { %>
+          <div class="empty-state">No routes yet.</div>
+        <% } else { %>
+          <table class="op-table">
+            <thead><tr><th>Route</th><th>Distance</th><th>Duration</th><th>Fare</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <% routes.forEach(function (r) { %>
+                <tr>
+                  <td><%= r.origin_stage_name %> &rarr; <%= r.destination_name %></td>
+                  <td><%= r.distance_km ? r.distance_km + ' km' : '—' %></td>
+                  <td><%= r.typical_duration_minutes ? Math.round(r.typical_duration_minutes/60*10)/10 + ' hrs' : '—' %></td>
+                  <td><%= r.base_fare_kes ? 'KES ' + Number(r.base_fare_kes).toLocaleString() : '—' %></td>
+                  <td><span class="badge badge-<%= r.status === 'active' ? 'boarding' : 'expired' %>"><%= r.status.charAt(0).toUpperCase() + r.status.slice(1) %></span></td>
+                  <td><a href="/operator/routes/<%= r.id %>/edit">Manage</a></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

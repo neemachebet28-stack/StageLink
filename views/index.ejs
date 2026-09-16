@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <main>
+    <!-- ============================================
+         Hero — the stage board is the product's core
+         promise made visible: real trip status, before
+         you leave the house.
+         ============================================ -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="hero-tagline">Book your journey before you reach the stage.</p>
+          <h1 class="h1">See your stage before you get there.</h1>
+          <p class="lede">
+            StageLink brings Nairobi's matatu and shuttle stages online — real operators,
+            real trips, and an honest status for each one, so you know what's actually
+            happening before you leave the house.
+          </p>
+
+          <div class="hero-actions">
+            <a href="/discover" class="btn btn-primary">Find your stage</a>
+            <a href="/operators" class="btn btn-secondary">Browse operators</a>
+          </div>
+
+          <p class="hero-note">
+            Browsing stages, operators, and routes below doesn't require an account.
+            Booking, payments, and accounts are arriving in a later phase.
+          </p>
+        </div>
+
+        <div class="stage-board" aria-label="Sample stage board">
+          <div class="stage-board-header">
+            <span class="stage-board-title">Ronald Ngala Stage</span>
+            <span class="stage-board-meta">Sample data for preview</span>
+          </div>
+
+          <div class="stage-row">
+            <div>
+              <div class="stage-row-destination">Nakuru</div>
+              <div class="stage-row-meta">Metro Shuttle Co. · Departs 10:45</div>
+            </div>
+            <div class="stage-row-seats">
+              <span class="badge badge-boarding">Boarding</span>
+              <div style="margin-top: 6px;">11 / 14 seats</div>
+            </div>
+          </div>
+
+          <div class="stage-row">
+            <div>
+              <div class="stage-row-destination">Nyeri</div>
+              <div class="stage-row-meta">Highland Express · Departs 11:15</div>
+            </div>
+            <div class="stage-row-seats">
+              <span class="badge badge-filling">Filling</span>
+              <div style="margin-top: 6px;">6 / 14 seats</div>
+            </div>
+          </div>
+
+          <div class="stage-row">
+            <div>
+              <div class="stage-row-destination">Kisumu</div>
+              <div class="stage-row-meta">Lakeside Travellers · Departs 12:30</div>
+            </div>
+            <div class="stage-row-seats">
+              <span class="badge badge-scheduled">Scheduled</span>
+              <div style="margin-top: 6px;">2 / 14 seats</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         How it works — a genuine sequence, so numbered
+         steps earn their place here.
+         ============================================ -->
+    <section id="how-it-works">
+      <div class="container">
+        <h2 class="h2">From stage search to boarding, in four steps</h2>
+        <p class="body-text" style="margin-top: 8px;">
+          Every step is backed by real operator data — never a guess dressed up as a status.
+        </p>
+
+        <div class="steps">
+          <div class="step">
+            <span class="step-index">1</span>
+            <h3>Find your stage</h3>
+            <p>Search by county, town, or your current location to see stages near you.</p>
+          </div>
+          <div class="step">
+            <span class="step-index">2</span>
+            <h3>Compare trips</h3>
+            <p>See verified operators, destinations, and real seat availability side by side.</p>
+          </div>
+          <div class="step">
+            <span class="step-index">3</span>
+            <h3>Reserve your seat</h3>
+            <p>Hold a seat, pay securely, and get a digital ticket with a QR code.</p>
+          </div>
+          <div class="step">
+            <span class="step-index">4</span>
+            <h3>Board with confidence</h3>
+            <p>Show your QR code at the stage — no guessing whether your seat is still there.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         Two-track features
+         ============================================ -->
+    <section id="for-operators">
+      <div class="container">
+        <h2 class="h2">Built for passengers and operators alike</h2>
+
+        <div class="tracks">
+          <div class="track-card">
+            <h3>For passengers</h3>
+            <p class="small-text">Everything you need before you leave the house.</p>
+            <ul class="track-list">
+              <li>Discover stages across all 47 counties</li>
+              <li>Compare verified operators and their routes</li>
+              <li>See real seat counts, not estimates</li>
+              <li>Hold a seat, pay, and get a digital ticket</li>
+              <li>Request transport for groups and events</li>
+            </ul>
+          </div>
+
+          <div class="track-card">
+            <h3>For operators</h3>
+            <p class="small-text">Run your fleet without the guesswork.</p>
+            <ul class="track-list">
+              <li>Manage vehicles, seat layouts, and drivers</li>
+              <li>Create and update trips in real time</li>
+              <li>Track bookings, payments, and revenue</li>
+              <li>Verify tickets at boarding with a scan</li>
+              <li>Respond to group and event transport requests</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         Trust
+         ============================================ -->
+    <section id="trust">
+      <div class="container">
+        <h2 class="h2">Built on honest status, not assumptions</h2>
+
+        <div class="trust-grid">
+          <div class="trust-item">
+            <h3>Verification you can check</h3>
+            <p>An operator's verified badge reflects an actual review, not a default every account gets.</p>
+          </div>
+          <div class="trust-item">
+            <h3>Status means what it says</h3>
+            <p>A vehicle is never shown as "at the stage" or "boarding" unless the operator's own data confirms it.</p>
+          </div>
+          <div class="trust-item">
+            <h3>Payments confirmed server-side</h3>
+            <p>A booking is only ever marked paid once the payment provider confirms it — never on trust alone.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <%- include('partials/footer') %>
+  <%- include('partials/scripts') %>
+</body>
+</html>

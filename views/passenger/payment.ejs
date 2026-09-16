@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main>
+    <section class="page-header">
+      <div class="container" style="max-width: 560px;">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="/bookings/<%= reference %>">Booking <%= reference %></a>
+          <span class="sep">/</span>
+          <span>Pay</span>
+        </nav>
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">Pay with M-Pesa</h1>
+        <p class="lede">KES <%= amountKes.toLocaleString() %> for <%= itemLabel %></p>
+        <% if (typeof operator !== 'undefined' && operator) { %>
+          <p class="small-text" style="margin-top: var(--space-2);">You are paying <strong><%= operator.name %></strong></p>
+          <%- include('../partials/trustBadge', { status: operator.verificationStatus, explain: true, summary: operator.summary }) %>
+        <% } %>
+
+        <% if (sandbox) { %>
+          <div class="empty-state" style="margin-top: var(--space-6); text-align: left;">
+            <strong>Sandbox mode:</strong> no M-Pesa credentials are configured (see
+            services/mpesa.js), so this simulates a real STK push and callback instead of
+            calling Safaricom. Use a test number ending in <code>00</code> to simulate a
+            failed payment, <code>11</code> to simulate a cancelled one, or anything else to
+            simulate success.
+          </div>
+        <% } %>
+
+        <% if (error) { %>
+          <div class="op-error" style="margin-top: var(--space-6);"><%= error %></div>
+        <% } %>
+
+        <div data-payment-panel data-reference="<%= reference %>"
+             data-status="<%= latestPayment ? latestPayment.status : 'none' %>">
+
+          <% if (!latestPayment || ['failed', 'cancelled'].includes(latestPayment.status)) { %>
+            <% if (latestPayment) { %>
+              <div class="op-error" style="margin-top: var(--space-6);">
+                Previous attempt <%= latestPayment.status %>: <%= latestPayment.result_desc || 'Please try again.' %>
+              </div>
+            <% } %>
+            <form class="op-form" method="post" action="/bookings/<%= reference %>/pay">
+              <div class="op-field">
+                <label for="phoneNumber">M-Pesa phone number</label>
+                <input type="text" id="phoneNumber" name="phoneNumber" placeholder="2547XXXXXXXX" pattern="254[17][0-9]{8}" required>
+                <p class="op-field-hint">Format: 2547XXXXXXXX or 2541XXXXXXXX — no spaces or +.</p>
+              </div>
+              <button type="submit" class="btn btn-primary">Send payment request</button>
+            </form>
+          <% } else if (latestPayment.status === 'success') { %>
+            <div class="empty-state" style="margin-top: var(--space-6); text-align: left; border-color: var(--color-primary); color: var(--color-primary);">
+              Payment confirmed. Receipt: <strong><%= latestPayment.mpesa_receipt_number %></strong>.
+              <a href="/bookings/<%= reference %>" style="color: var(--color-primary); font-weight: 600;">View your booking</a>.
+            </div>
+          <% } else { %>
+            <div class="empty-state" style="margin-top: var(--space-6); text-align: left;" data-awaiting-payment>
+              A payment request was sent to <strong><%= latestPayment.phone_number %></strong>. Enter your M-Pesa PIN
+              on your phone to complete it.
+              <div class="small-text" style="margin-top: 8px;" data-poll-status>Checking for confirmation…</div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/operatorHeader') %>
+
+  <main class="op-main">
+    <section class="page-header">
+      <div class="container" style="max-width: 640px;">
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">Verify ticket</h1>
+        <p class="lede">Scan a passenger's QR code, or type the code below.</p>
+
+        <% if (error) { %>
+          <div class="op-error" style="margin-top: var(--space-6);"><%= error %></div>
+        <% } %>
+
+        <div class="op-field" style="margin-top: var(--space-6);" data-camera-wrap hidden>
+          <label>Camera scan</label>
+          <video data-camera-video style="width: 100%; border-radius: var(--radius-card); background: #000;" muted playsinline></video>
+        </div>
+
+        <form class="op-form" method="post" action="/operator/verify" data-verify-form>
+          <div class="op-field">
+            <label for="token">Ticket code</label>
+            <input type="text" id="token" name="token" autocomplete="off" autofocus placeholder="Paste or scan the ticket's QR value">
+            <p class="op-field-hint" data-camera-hint>Starting camera scanner if your device supports it…</p>
+          </div>
+          <button type="submit" class="btn btn-primary">Verify</button>
+        </form>
+
+        <% if (scanResult) { %>
+          <% const resultTone = {
+               valid: { label: 'Valid ticket', cls: 'badge-boarding' },
+               boarded: { label: 'Boarded', cls: 'badge-boarding' },
+               already_boarded: { label: 'Already boarded', cls: 'badge-filling' },
+               invalid: { label: 'Invalid ticket', cls: 'badge-cancelled' },
+               cancelled: { label: 'Cancelled', cls: 'badge-cancelled' },
+               expired: { label: 'Expired', cls: 'badge-expired' },
+             }[scanResult] || { label: scanResult, cls: 'badge-expired' };
+          %>
+          <div class="ticket-card" style="margin-top: var(--space-8);">
+            <div class="ticket-header">
+              <span class="badge <%= resultTone.cls %>" style="font-size: 0.95rem; padding: 8px 16px;"><%= resultTone.label %></span>
+            </div>
+
+            <% if (ticket) { %>
+              <div class="ticket-body" style="grid-template-columns: 1fr;">
+                <div class="ticket-fields">
+                  <div>
+                    <div class="ticket-field-label">Passenger</div>
+                    <div class="ticket-field-value"><%= ticket.passenger_name %></div>
+                  </div>
+                  <div>
+                    <div class="ticket-field-label">Booking</div>
+                    <div class="ticket-field-value"><%= ticket.ticket_number %></div>
+                  </div>
+                  <div>
+                    <div class="ticket-field-label">Destination</div>
+                    <div class="ticket-field-value"><%= ticket.origin_stage_name %> &rarr; <%= ticket.destination_name %></div>
+                  </div>
+                  <div>
+                    <div class="ticket-field-label">Vehicle</div>
+                    <div class="ticket-field-value"><%= ticket.registration_number %></div>
+                  </div>
+                  <div>
+                    <div class="ticket-field-label">Seat</div>
+                    <div class="ticket-field-value"><%= ticket.seat_number %></div>
+                  </div>
+                  <div>
+                    <div class="ticket-field-label">Travel date</div>
+                    <div class="ticket-field-value"><%= formatDateTime(ticket.scheduled_departure) %></div>
+                  </div>
+                  <div>
+                    <div class="ticket-field-label">Departure</div>
+                    <div class="ticket-field-value">
+                      <%= ticket.estimated_departure ? formatDateTime(ticket.estimated_departure) : formatDateTime(ticket.scheduled_departure) %>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="ticket-field-label">Payment status</div>
+                    <div class="ticket-field-value">
+                      <span class="badge badge-<%= ticket.payment_status || 'pending' %>"><%= (ticket.payment_status || 'pending').charAt(0).toUpperCase() + (ticket.payment_status || 'pending').slice(1) %></span>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="ticket-field-label">Ticket status</div>
+                    <div class="ticket-field-value">
+                      <span class="badge badge-<%= ticket.ticket_status %>"><%= ticket.ticket_status.charAt(0).toUpperCase() + ticket.ticket_status.slice(1) %></span>
+                    </div>
+                  </div>
+                </div>
+
+                <% if (scanResult === 'valid') { %>
+                  <form method="post" action="/operator/verify/<%= ticket.ticket_id %>/board" style="margin-top: var(--space-6);">
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Mark passenger BOARDED</button>
+                  </form>
+                <% } %>
+              </div>
+            <% } else { %>
+              <div class="ticket-body">
+                <p class="body-text">This code doesn't match a valid ticket for your organization.</p>
+              </div>
+            <% } %>
+          </div>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

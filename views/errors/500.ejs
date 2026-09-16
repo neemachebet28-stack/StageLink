@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main class="error-page">
+    <div class="container">
+      <span class="error-code">500</span>
+      <h1 class="h2">Something went wrong on our end</h1>
+      <p class="body-text">
+        This isn't something you did — an unexpected error occurred while handling your
+        request. It's been logged, and you can try again in a moment.
+      </p>
+      <a href="/" class="btn btn-primary">Back to StageLink</a>
+    </div>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

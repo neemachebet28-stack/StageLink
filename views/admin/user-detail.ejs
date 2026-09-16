@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/adminHeader') %>
+
+  <main class="op-main">
+    <section class="page-header">
+      <div class="container" style="max-width: 560px;">
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/admin/users">Users</a><span class="sep">/</span><span><%= user.full_name %></span></nav>
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);"><%= user.full_name %></h1>
+        <p class="lede"><%= user.role.charAt(0).toUpperCase() + user.role.slice(1) %><% if (user.organization_name) { %> · <%= user.organization_name %><% } %></p>
+
+        <div class="list-rows" style="margin-top: var(--space-6);">
+          <div class="list-row"><div class="list-row-title">Email</div><div class="list-row-meta"><%= user.email %></div></div>
+          <div class="list-row"><div class="list-row-title">Phone</div><div class="list-row-meta"><%= user.phone || '—' %></div></div>
+          <div class="list-row"><div class="list-row-title">Status</div><span class="badge badge-<%= user.status === 'active' ? 'boarding' : 'expired' %>"><%= user.status.charAt(0).toUpperCase() + user.status.slice(1) %></span></div>
+          <div class="list-row"><div class="list-row-title">Joined</div><div class="list-row-meta"><%= formatDateTime(user.created_at) %></div></div>
+          <div class="list-row"><div class="list-row-title">Last login</div><div class="list-row-meta"><%= user.last_login_at ? formatDateTime(user.last_login_at) : 'Never' %></div></div>
+        </div>
+
+        <% if (isSelf) { %>
+          <p class="small-text" style="margin-top: var(--space-6);">This is your own account — it can't be suspended from here.</p>
+        <% } else if (user.status === 'active') { %>
+          <form method="post" action="/admin/users/<%= user.id %>/status" style="margin-top: var(--space-6);" onsubmit="return confirm('Suspend this user?');">
+            <input type="hidden" name="status" value="suspended">
+            <button type="submit" class="btn btn-secondary">Suspend account</button>
+          </form>
+        <% } else if (user.status === 'suspended') { %>
+          <form method="post" action="/admin/users/<%= user.id %>/status" style="margin-top: var(--space-6);">
+            <input type="hidden" name="status" value="active">
+            <button type="submit" class="btn btn-primary">Reactivate account</button>
+          </form>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

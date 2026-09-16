@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/operatorHeader') %>
+
+  <main class="op-main">
+    <section class="page-header">
+      <div class="container" style="max-width: 640px;">
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">New trip</h1>
+        <p class="lede">Schedule a trip on one of your existing routes.</p>
+
+        <% if (error) { %>
+          <div class="op-error" style="margin-top: var(--space-6);"><%= error %></div>
+        <% } %>
+
+        <% if (routes.length === 0) { %>
+          <div class="empty-state" style="margin-top: var(--space-6);">
+            You don't have any active routes yet. Routes are set up in Phase 2's transport
+            network — contact platform support to add one.
+          </div>
+        <% } else { %>
+          <form class="op-form" method="post" action="/operator/trips">
+            <div class="op-field">
+              <label for="routeId">Route</label>
+              <select id="routeId" name="routeId" required>
+                <option value="">Select a route</option>
+                <% routes.forEach(function (r) { %>
+                  <option value="<%= r.id %>" data-fare="<%= r.base_fare_kes || '' %>">
+                    <%= r.origin_stage_name %> &rarr; <%= r.destination_name %> (<%= r.name %>)
+                  </option>
+                <% }); %>
+              </select>
+            </div>
+
+            <div class="op-field">
+              <label for="vehicleId">Vehicle</label>
+              <select id="vehicleId" name="vehicleId" required>
+                <option value="">Select a vehicle</option>
+                <% vehicles.forEach(function (v) { %>
+                  <option value="<%= v.id %>"><%= v.registration_number %> — <%= v.seat_layout_name %> (<%= v.total_seats %> seats)</option>
+                <% }); %>
+              </select>
+              <% if (vehicles.length === 0) { %>
+                <p class="op-field-hint">No vehicles on file — contact platform support to add one.</p>
+              <% } %>
+            </div>
+
+            <div class="op-field">
+              <label for="driverId">Driver <span class="small-text">(optional)</span></label>
+              <select id="driverId" name="driverId">
+                <option value="">Not yet assigned</option>
+                <% drivers.forEach(function (d) { %>
+                  <option value="<%= d.id %>"><%= d.full_name %></option>
+                <% }); %>
+              </select>
+            </div>
+
+            <div class="op-field">
+              <label for="departurePolicy">Departure policy</label>
+              <select id="departurePolicy" name="departurePolicy" required>
+                <option value="fixed">Fixed scheduled departure</option>
+                <option value="flexible_window">Flexible departure window</option>
+                <option value="occupancy_dependent">Occupancy-dependent departure</option>
+              </select>
+              <p class="op-field-hint">This only informs how passengers see the schedule — it never changes trip status automatically.</p>
+            </div>
+
+            <div class="op-field">
+              <label for="scheduledDeparture">Scheduled departure</label>
+              <input type="datetime-local" id="scheduledDeparture" name="scheduledDeparture" required>
+            </div>
+
+            <div class="op-field">
+              <label for="fareKes">Fare (KES)</label>
+              <input type="number" id="fareKes" name="fareKes" min="0" step="1" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create trip</button>
+          </form>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+  <script>
+    // Pre-fill the fare from the route's base fare as a starting point —
+    // the operator can still override it per trip.
+    (function () {
+      var routeSelect = document.getElementById('routeId');
+      var fareInput = document.getElementById('fareKes');
+      if (!routeSelect || !fareInput) return;
+      routeSelect.addEventListener('change', function () {
+        var option = routeSelect.options[routeSelect.selectedIndex];
+        var fare = option ? option.getAttribute('data-fare') : '';
+        if (fare && !fareInput.value) fareInput.value = fare;
+      });
+    })();
+  </script>
+</body>
+</html>

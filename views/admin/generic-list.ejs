@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/adminHeader') %>
+
+  <main class="op-main">
+    <section class="page-header">
+      <div class="container">
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);"><%= heading %></h1>
+        <% if (typeof subheading !== 'undefined' && subheading) { %><p class="lede"><%= subheading %></p><% } %>
+      </div>
+    </section>
+
+    <section style="padding-top: 0;">
+      <div class="container">
+        <% if (rows.length === 0) { %>
+          <div class="empty-state">Nothing here yet.</div>
+        <% } else { %>
+          <table class="op-table">
+            <thead>
+              <tr>
+                <% columns.forEach(function (col) { %><th><%= col.label %></th><% }); %>
+                <% if (typeof rowLink !== 'undefined' && rowLink) { %><th></th><% } %>
+              </tr>
+            </thead>
+            <tbody>
+              <% rows.forEach(function (row) { %>
+                <tr>
+                  <% columns.forEach(function (col) {
+                       const value = row[col.key];
+                  %>
+                    <td>
+                      <% if (col.type === 'badge') { %>
+                        <span class="badge badge-<%= value %>"><%= value ? (String(value).charAt(0).toUpperCase() + String(value).slice(1)) : '—' %></span>
+                      <% } else if (col.type === 'kes') { %>
+                        <%= value != null ? 'KES ' + Number(value).toLocaleString() : '—' %>
+                      <% } else if (col.type === 'datetime') { %>
+                        <%= value ? formatDateTime(value) : '—' %>
+                      <% } else { %>
+                        <%= (value === null || value === undefined || value === '') ? '—' : value %>
+                      <% } %>
+                    </td>
+                  <% }); %>
+                  <% if (typeof rowLink !== 'undefined' && rowLink) { %>
+                    <td><a href="<%= rowLink(row) %>">View</a></td>
+                  <% } %>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

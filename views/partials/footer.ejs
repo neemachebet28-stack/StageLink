@@ -1,0 +1,26 @@
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <div class="nav-logo">
+        <span class="nav-logo-mark" aria-hidden="true">SL</span>
+        <span><%= appName %></span>
+      </div>
+      <p class="small-text" style="margin-top: 8px;">Book your journey before you reach the stage.</p>
+    </div>
+
+    <div class="footer-links">
+      <a href="/discover">Discover stages</a>
+      <a href="/operators">Operators</a>
+      <a href="/destinations">Destinations</a>
+      <a href="/group-trips">Group transport</a>
+      <a href="/#trust">Trust &amp; safety</a>
+      <% if (currentUser && currentUser.role === 'operator') { %>
+        <a href="/operator">Operator dashboard</a>
+      <% } else { %>
+        <a href="/login">Operator sign in</a>
+      <% } %>
+    </div>
+
+    <p class="small-text">&copy; <%= new Date().getFullYear() %> StageLink. Built as a Kenyan transport SaaS capstone project.</p>
+  </div>
+</footer>

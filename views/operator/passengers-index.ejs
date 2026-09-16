@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/operatorHeader') %>
+
+  <main class="op-main">
+    <section class="page-header">
+      <div class="container">
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">Passengers</h1>
+        <p class="lede">Everyone who has booked with you, derived from your booking history.</p>
+      </div>
+    </section>
+    <section style="padding-top: 0;">
+      <div class="container">
+        <% if (passengers.length === 0) { %>
+          <div class="empty-state">No passengers yet.</div>
+        <% } else { %>
+          <table class="op-table">
+            <thead><tr><th>Name</th><th>Phone</th><th>Bookings</th><th>Total spent</th><th>Last booking</th></tr></thead>
+            <tbody>
+              <% passengers.forEach(function (p) { %>
+                <tr>
+                  <td><%= p.passenger_name %></td>
+                  <td><%= p.passenger_phone %></td>
+                  <td><%= p.booking_count %></td>
+                  <td>KES <%= Number(p.total_spent_kes).toLocaleString() %></td>
+                  <td><%= formatDateTime(p.last_booking_at) %></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

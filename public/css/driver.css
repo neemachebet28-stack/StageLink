@@ -1,0 +1,222 @@
+/* ==================================================
+   StageLink — driver/boarding staff portal
+   ==================================================
+   Mobile-first by design: this interface is used standing at a stage,
+   often one-handed, often in bright sunlight. Large tap targets
+   (min 48px), high contrast, single-column layout that never
+   requires horizontal scrolling or pinch-zooming. It still works on
+   a wider screen, but nothing here was designed desktop-first and
+   then shrunk down.
+   ================================================== */
+
+.drv-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-dark);
+  color: #ffffff;
+}
+
+.drv-topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.drv-topbar-signout {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  min-height: 40px;
+}
+
+.drv-container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: var(--space-4);
+}
+
+.drv-page-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-dark);
+  margin-bottom: var(--space-1);
+}
+
+.drv-page-sub {
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+  margin-bottom: var(--space-4);
+}
+
+/* Trip cards — big, tappable, one per row always */
+.drv-trip-card {
+  display: block;
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  margin-bottom: var(--space-3);
+}
+
+.drv-trip-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.drv-trip-route {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--color-dark);
+}
+
+.drv-trip-meta {
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.drv-trip-stats {
+  display: flex;
+  gap: var(--space-4);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/* Big, thumb-friendly action buttons */
+.drv-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: var(--space-4) 0;
+}
+
+.drv-actions .btn {
+  min-height: 52px;
+  font-size: 1rem;
+}
+
+/* Section blocks on the trip detail page */
+.drv-section {
+  margin-top: var(--space-6);
+}
+
+.drv-section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-dark);
+  margin-bottom: var(--space-3);
+}
+
+.drv-passenger-row,
+.drv-seat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  margin-bottom: var(--space-2);
+  font-size: 0.9rem;
+}
+
+.drv-status-form select {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border-radius: var(--radius-input);
+  border: 1px solid var(--color-border);
+  font-family: var(--font-base);
+  font-size: 1rem;
+  margin-bottom: var(--space-3);
+}
+
+.drv-status-form button {
+  width: 100%;
+  min-height: 52px;
+}
+
+/* Verify/scan screen */
+.drv-scan-input {
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 16px;
+  border-radius: var(--radius-input);
+  border: 1px solid var(--color-border);
+  font-size: 1.05rem;
+  margin-bottom: var(--space-3);
+}
+
+.drv-result-card {
+  margin-top: var(--space-6);
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.drv-result-banner {
+  padding: var(--space-4);
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #ffffff;
+}
+
+.drv-result-banner.valid,
+.drv-result-banner.boarded {
+  background: var(--color-primary);
+}
+
+.drv-result-banner.already_boarded {
+  background: var(--color-warning);
+}
+
+.drv-result-banner.invalid,
+.drv-result-banner.cancelled {
+  background: var(--color-error);
+}
+
+.drv-result-banner.expired {
+  background: var(--color-text-faint);
+}
+
+.drv-result-body {
+  padding: var(--space-4);
+  background: var(--color-surface);
+}
+
+.drv-result-field {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.9rem;
+}
+
+.drv-result-field:last-child {
+  border-bottom: none;
+}
+
+.drv-board-button {
+  width: 100%;
+  min-height: 56px;
+  margin-top: var(--space-4);
+  font-size: 1.05rem;
+}

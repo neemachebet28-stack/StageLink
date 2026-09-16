@@ -1,0 +1,790 @@
+/* ==================================================
+   StageLink — passenger discovery styles
+   ==================================================
+   Loaded on top of style.css for all passenger/*.ejs pages: search,
+   breadcrumbs, list cards, stage detail layout, and the map
+   integration-layer placeholder.
+   ================================================== */
+
+/* --------------------------------------------------
+   Page header (used across discover/county/town/stage/
+   operator/destination/route pages)
+   -------------------------------------------------- */
+.page-header {
+  padding: var(--space-12) 0 var(--space-8);
+}
+
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--color-text-faint);
+  margin-bottom: var(--space-4);
+}
+
+.breadcrumbs a {
+  color: var(--color-text-muted);
+}
+
+.breadcrumbs a:hover {
+  color: var(--color-primary);
+}
+
+.breadcrumbs .sep {
+  color: var(--color-border);
+}
+
+.page-header p.lede {
+  margin-top: var(--space-2);
+}
+
+/* --------------------------------------------------
+   Search
+   -------------------------------------------------- */
+.search-form {
+  display: flex;
+  gap: var(--space-3);
+  max-width: 560px;
+  margin-top: var(--space-6);
+}
+
+.search-input {
+  flex: 1;
+  padding: 13px 16px;
+  border-radius: var(--radius-input);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  font-size: 0.95rem;
+  font-family: var(--font-base);
+  color: var(--color-text);
+}
+
+.search-input:focus-visible {
+  border-color: var(--color-primary);
+}
+
+.search-results-note {
+  margin-top: var(--space-3);
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+/* --------------------------------------------------
+   Entity grid (counties, towns, operators, destinations)
+   -------------------------------------------------- */
+.entity-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+}
+
+.entity-card {
+  display: block;
+  padding: var(--space-6);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  transition: border-color 0.15s var(--ease-standard), transform 0.1s var(--ease-standard);
+}
+
+.entity-card:hover {
+  border-color: var(--color-primary);
+}
+
+.entity-card-title {
+  font-weight: 600;
+  font-size: 1.02rem;
+  color: var(--color-dark);
+}
+
+.entity-card-meta {
+  margin-top: var(--space-1);
+  font-size: 0.85rem;
+  color: var(--color-text-faint);
+}
+
+/* --------------------------------------------------
+   List rows (stages within a town, operators at a stage)
+   -------------------------------------------------- */
+.list-rows {
+  margin-top: var(--space-8);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+.list-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-6);
+}
+
+.list-row + .list-row {
+  border-top: 1px solid var(--color-border);
+}
+
+.list-row-title {
+  font-weight: 600;
+  color: var(--color-dark);
+  font-size: 0.98rem;
+}
+
+.list-row-meta {
+  font-size: 0.85rem;
+  color: var(--color-text-faint);
+  margin-top: 2px;
+}
+
+.list-row-action {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------
+   Verification badges
+   -------------------------------------------------- */
+.badge-verified {
+  background: var(--color-primary-tint);
+  color: var(--color-primary);
+}
+
+.badge-pending {
+  background: var(--color-warning-tint);
+  color: var(--color-warning);
+}
+
+.badge-unverified {
+  background: var(--color-bg);
+  color: var(--color-text-faint);
+  border: 1px solid var(--color-border);
+}
+
+.badge-unverified::before {
+  display: none;
+}
+
+.badge-rejected {
+  background: var(--color-error-tint);
+  color: var(--color-error);
+}
+
+/* --------------------------------------------------
+   Stage detail layout
+   -------------------------------------------------- */
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-8);
+  margin-top: var(--space-8);
+  align-items: start;
+}
+
+.detail-section {
+  margin-top: var(--space-12);
+}
+
+.detail-section:first-child {
+  margin-top: 0;
+}
+
+.detail-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.empty-state {
+  padding: var(--space-8);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-card);
+  color: var(--color-text-faint);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* --------------------------------------------------
+   Map integration layer — placeholder renderer
+   -------------------------------------------------- */
+.map-panel {
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.map-placeholder {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background-color: var(--color-primary-tint);
+  background-image: linear-gradient(rgba(16, 35, 28, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 35, 28, 0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-placeholder-pin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.map-placeholder-pin-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  border: 3px solid #ffffff;
+  box-shadow: 0 2px 10px rgba(16, 35, 28, 0.3);
+}
+
+.map-placeholder-label {
+  background: var(--color-dark);
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+}
+
+.map-panel-footer {
+  padding: var(--space-4) var(--space-6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  border-top: 1px solid var(--color-border);
+}
+
+.map-coordinates {
+  font-size: 0.82rem;
+  color: var(--color-text-faint);
+}
+
+.directions-actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.directions-actions a {
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 7px 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.directions-actions a:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* --------------------------------------------------
+   Seat map
+   -------------------------------------------------- */
+.seat-map-panel {
+  padding: var(--space-6);
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.seat-map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+
+.seat-map-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.seat-map-legend-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+}
+
+.seat-row {
+  display: flex;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.seat-button {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: border-color 0.15s var(--ease-standard), background-color 0.15s var(--ease-standard),
+    transform 0.1s var(--ease-standard);
+}
+
+.seat-button:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.seat-button:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.seat-button[data-seat-status="booked"],
+.seat-button[data-seat-status="reserved"] {
+  background: var(--color-bg);
+  color: var(--color-text-faint);
+  border-style: dashed;
+  cursor: not-allowed;
+}
+
+.seat-button[data-seat-status="disabled"] {
+  background: repeating-linear-gradient(45deg, var(--color-bg), var(--color-bg) 4px, var(--color-border) 4px, var(--color-border) 8px);
+  color: var(--color-text-faint);
+  cursor: not-allowed;
+}
+
+.seat-button[data-seat-status="held"] {
+  background: var(--color-warning-tint);
+  border-color: var(--color-warning);
+  color: var(--color-warning);
+  cursor: not-allowed;
+}
+
+.seat-button[data-held-by-you="true"] {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.seat-selection-footer {
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.seat-selection-status {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  min-height: 1.4em;
+}
+
+.seat-selection-status[data-tone="error"] {
+  color: var(--color-error);
+}
+
+.seat-selection-status[data-tone="success"] {
+  color: var(--color-primary);
+}
+
+.hold-timer {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+/* --------------------------------------------------
+   Booking summary
+   -------------------------------------------------- */
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.95rem;
+}
+
+.summary-line:last-of-type {
+  border-bottom: none;
+}
+
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  padding-top: var(--space-4);
+  margin-top: var(--space-2);
+  border-top: 2px solid var(--color-dark);
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+/* --------------------------------------------------
+   Digital ticket
+   -------------------------------------------------- */
+.ticket-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  overflow: hidden;
+  margin-top: var(--space-6);
+}
+
+.ticket-header {
+  background: var(--color-dark);
+  color: #ffffff;
+  padding: var(--space-6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.ticket-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+}
+
+.ticket-operator {
+  text-align: right;
+}
+
+.ticket-operator-name {
+  font-weight: 600;
+}
+
+.ticket-body {
+  padding: var(--space-6);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-8);
+}
+
+.ticket-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4) var(--space-6);
+}
+
+.ticket-field-label {
+  font-size: 0.72rem;
+  color: var(--color-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.ticket-field-value {
+  margin-top: 2px;
+  font-weight: 600;
+  color: var(--color-dark);
+  font-size: 0.95rem;
+}
+
+.ticket-qr-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  justify-self: end;
+}
+
+.ticket-qr-block img {
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+}
+
+.ticket-footer {
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px dashed var(--color-border);
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.ticket-actions {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 767px) {
+  .ticket-body {
+    grid-template-columns: 1fr;
+  }
+
+  .ticket-qr-block {
+    justify-self: center;
+  }
+
+  .ticket-fields {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Print-friendly ticket: hide site chrome, keep the ticket itself
+   clean on the page. The browser's own "Print" / "Save as PDF" is
+   the PDF/download architecture for this phase — see README. */
+@media print {
+  .site-header,
+  .site-footer,
+  .ticket-actions,
+  .breadcrumbs {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff;
+  }
+
+  .ticket-card {
+    border: 1px solid #000000;
+    box-shadow: none;
+    break-inside: avoid;
+  }
+
+  .ticket-header {
+    background: #000000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* --------------------------------------------------
+   Trip cards
+   -------------------------------------------------- */
+.trip-cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.trip-card {
+  padding: var(--space-6);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+}
+
+.trip-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.trip-card-operator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: var(--color-dark);
+}
+
+.trip-card-route {
+  margin-top: 2px;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.trip-card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.trip-card-stat-label {
+  font-size: 0.75rem;
+  color: var(--color-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.trip-card-stat-value {
+  margin-top: 4px;
+  font-weight: 600;
+  color: var(--color-dark);
+  font-size: 0.95rem;
+}
+
+.seat-meter {
+  margin-top: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.seat-meter-fill {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: var(--radius-pill);
+}
+
+@media (max-width: 767px) {
+  .trip-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* --------------------------------------------------
+   Nearby stages (geolocation-driven)
+   -------------------------------------------------- */
+.nearby-panel {
+  margin-top: var(--space-8);
+  padding: var(--space-6);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.nearby-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.nearby-status {
+  margin-top: var(--space-4);
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.nearby-results {
+  margin-top: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* --------------------------------------------------
+   Responsive
+   -------------------------------------------------- */
+@media (max-width: 1023px) {
+  .entity-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .entity-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .search-form {
+    flex-direction: column;
+  }
+
+  .list-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+}
+
+/* --------------------------------------------------
+   Trust indicators + reviews (Phase 12)
+   -------------------------------------------------- */
+.trust-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+}
+
+.trust-rating {
+  color: var(--color-text-muted);
+}
+
+.trust-explain {
+  margin-top: var(--space-2);
+  max-width: 52ch;
+}
+
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  list-style: none;
+  padding: 0;
+}
+
+.review-item {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+}
+
+.review-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.review-rating {
+  font-weight: 700;
+  color: var(--color-dark);
+}
+
+.review-comment {
+  margin-top: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+  overflow-wrap: anywhere;
+}
+
+.review-report {
+  margin-top: var(--space-2);
+}
+
+.review-report button {
+  background: none;
+  border: none;
+  padding: 8px 0;
+  min-height: 44px;
+  color: var(--color-text-faint);
+  font: inherit;
+  font-size: 0.82rem;
+  text-decoration: underline;
+  cursor: pointer;
+}

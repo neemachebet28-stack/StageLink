@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="/operators">Operators</a>
+          <span class="sep">/</span>
+          <span><%= operator.name %></span>
+        </nav>
+        <div style="display:flex; align-items:center; gap: var(--space-4); flex-wrap: wrap;">
+          <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);"><%= operator.name %></h1>
+        </div>
+        <%- include('../partials/trustBadge', { status: operator.verification_status, explain: true, summary: reviewSummary }) %>
+        <% if (operator.description) { %>
+          <p class="lede"><%= operator.description %></p>
+        <% } %>
+        <% if (operator.contact_phone || operator.contact_email) { %>
+          <p class="small-text" style="margin-top: var(--space-2);">
+            <% if (operator.contact_phone) { %><%= operator.contact_phone %><% } %>
+            <% if (operator.contact_phone && operator.contact_email) { %> · <% } %>
+            <% if (operator.contact_email) { %><%= operator.contact_email %><% } %>
+          </p>
+        <% } %>
+      </div>
+    </section>
+
+    <section style="padding-bottom: 0;">
+      <div class="container" style="max-width: 720px;">
+        <h2 class="h2">Passenger reviews</h2>
+        <p class="small-text" style="margin-top: var(--space-1);">Only passengers who completed a trip with this operator can leave a review.</p>
+        <% if (reviews.length === 0) { %>
+          <div class="empty-state" style="margin-top: var(--space-4);">No reviews yet.</div>
+        <% } else { %>
+          <ul class="review-list">
+            <% reviews.forEach(function (r) { %>
+              <li class="review-item">
+                <div class="review-head">
+                  <span class="review-rating"><%= r.rating %>/5</span>
+                  <span class="small-text"><%= r.passenger_name %> · <%= timeAgo(r.created_at) %></span>
+                </div>
+                <% if (r.comment) { %><p class="review-comment"><%= r.comment %></p><% } %>
+                <form class="review-report" method="post" action="/reviews/<%= r.id %>/report">
+                  <input type="hidden" name="returnTo" value="/operators/<%= operator.id %>">
+                  <button type="submit">Report this review</button>
+                </form>
+              </li>
+            <% }); %>
+          </ul>
+        <% } %>
+      </div>
+    </section>
+
+    <section>
+      <div class="container detail-grid">
+        <div class="detail-section">
+          <div class="detail-section-title">
+            <h2 class="h3">Service area</h2>
+          </div>
+          <% if (stages.length === 0) { %>
+            <div class="empty-state">No stages listed for this operator yet.</div>
+          <% } else { %>
+            <div class="list-rows">
+              <% stages.forEach(function (s) { %>
+                <a class="list-row" href="/stages/<%= s.id %>">
+                  <div>
+                    <div class="list-row-title"><%= s.stage_name %></div>
+                    <div class="list-row-meta"><%= s.town_name %>, <%= s.county_name %></div>
+                  </div>
+                </a>
+              <% }); %>
+            </div>
+          <% } %>
+        </div>
+
+        <div class="detail-section">
+          <div class="detail-section-title">
+            <h2 class="h3">Routes</h2>
+          </div>
+          <% if (routes.length === 0) { %>
+            <div class="empty-state">No routes listed for this operator yet.</div>
+          <% } else { %>
+            <div class="list-rows">
+              <% routes.forEach(function (r) { %>
+                <a class="list-row" href="/routes/<%= r.id %>">
+                  <div>
+                    <div class="list-row-title"><%= r.origin_stage_name %> &rarr; <%= r.destination_name %></div>
+                    <% if (r.typical_duration_minutes) { %>
+                      <div class="list-row-meta">~<%= Math.round(r.typical_duration_minutes / 60 * 10) / 10 %> hrs</div>
+                    <% } %>
+                  </div>
+                  <% if (r.base_fare_kes) { %>
+                    <div class="list-row-action">KES <%= Number(r.base_fare_kes).toLocaleString() %></div>
+                  <% } %>
+                </a>
+              <% }); %>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <h1 class="h1" style="font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.6rem);">Request <%= request.request_reference %></h1>
+        <p class="lede"><%= request.origin_text %> &rarr; <%= request.destination_text %> · <%= request.passenger_count %> passengers · <%= request.travel_date %></p>
+        <span class="badge badge-<%= request.status === 'open' ? 'filling' : (request.status === 'accepted' ? 'confirmed' : (request.status === 'completed' ? 'boarding' : 'cancelled')) %>">
+          <%= request.status.charAt(0).toUpperCase() + request.status.slice(1) %>
+        </span>
+
+        <% if (error) { %><div class="op-error" style="margin-top: var(--space-6);"><%= error %></div><% } %>
+      </div>
+    </section>
+
+    <section style="padding-top: 0;">
+      <div class="container">
+        <h2 class="h2">Quotations (<%= quotations.length %>)</h2>
+
+        <% if (quotations.length === 0) { %>
+          <div class="empty-state" style="margin-top: var(--space-6);">
+            No quotations yet — check back soon, operators are reviewing your request.
+          </div>
+        <% } else { %>
+          <div class="trip-cards">
+            <% quotations.forEach(function (q) { %>
+              <div class="trip-card">
+                <div class="trip-card-header">
+                  <div>
+                    <div class="trip-card-operator">
+                      <%= q.organization_name %>
+                      <span class="badge badge-<%= q.verification_status %>" style="font-size: 0.72rem; padding: 3px 9px;">
+                        <%= q.verification_status.charAt(0).toUpperCase() + q.verification_status.slice(1) %>
+                      </span>
+                    </div>
+                    <% if (q.vehicle_details) { %><div class="trip-card-route"><%= q.vehicle_details %></div><% } %>
+                  </div>
+                  <span class="badge badge-<%= q.status === 'pending' ? 'filling' : (q.status === 'accepted' ? 'confirmed' : 'cancelled') %>">
+                    <%= q.status.charAt(0).toUpperCase() + q.status.slice(1) %>
+                  </span>
+                </div>
+                <div style="margin-top: var(--space-4);">
+                  <div class="trip-card-stat-label">Price</div>
+                  <div class="trip-card-stat-value" style="font-size: 1.2rem;">KES <%= Number(q.price_kes).toLocaleString() %></div>
+                </div>
+                <% if (q.notes) { %><p class="body-text" style="margin-top: var(--space-3);"><%= q.notes %></p><% } %>
+
+                <% if (q.status === 'pending' && request.status === 'open') { %>
+                  <div style="display:flex; gap: var(--space-3); margin-top: var(--space-4);">
+                    <form method="post" action="/group-trips/<%= request.request_reference %>/quotations/<%= q.id %>/accept" style="flex:1;">
+                      <button type="submit" class="btn btn-primary" style="width:100%;">Accept</button>
+                    </form>
+                    <form method="post" action="/group-trips/<%= request.request_reference %>/quotations/<%= q.id %>/reject" style="flex:1;">
+                      <button type="submit" class="btn btn-secondary" style="width:100%;">Decline</button>
+                    </form>
+                  </div>
+                <% } %>
+              </div>
+            <% }); %>
+          </div>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+</body>
+</html>
